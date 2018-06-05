@@ -129,5 +129,9 @@ typings/
 .DS_Store
 .idea
 
+# React
+server/client
+*/build
+
 
 # End of https://www.gitignore.io/api/node,intellij

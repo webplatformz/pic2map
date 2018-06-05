@@ -8,10 +8,18 @@
   },
   "private": true,
   "scripts": {
-    "install": "cd client && npm install && cd ../server && npm install",
-    "start": "cd client && npm start",
-    "build": "cd client && npm build",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "build:client": "cd client && npm run build",
+    "build:prod": "rimraf server/client && mkdirp server/client && npm run build:client && cpx client/build/**/*.* server/client",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "concurrently": "3.5.1",
+    "cpx": "1.5.0",
+    "mkdirp": "0.5.1",
+    "rimraf": "2.6.2"
   }
 }
