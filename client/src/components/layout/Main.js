@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
-import WorkspaceCreator from '../pages/home/WorkspaceCreator'
+import WorkspaceCreator from '../pages/workspacecreator/WorkspaceCreator'
 import Map from '../pages/map/Map'
 
 const Main = () => (
