@@ -9,8 +9,7 @@ cache:
 install:
   - npm run install:all
 script:
-  - npm run test:client
-  - npm run test:server
+  - npm run test:ci
   - npm run build:prod
 before_deploy:
   - cd server
