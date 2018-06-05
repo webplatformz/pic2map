@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- '10'
+cache:
+  directories:
+  - node_modules
+  - client/node_modules
+  - server/node_modules
+install:
+  - npm run install:all
+script:
+  - npm test
+  - npm run build:prod
+before_deploy:
+  - cd server
+deploy:
+  provider: heroku
+  api_key:
+    secure: BPyuSk0kmBsZtsaQhvboZwlYiOavDIrds26IsjJk0/cOhkhnTF9Xj6Q9XEN2/iLq+nv3HDNfmulaGzTUVatj5nu97nIjgenIfs9SPbdv3PiuGvqte4LH1zgslB9spO5/dPgq1er1x5Lxw5gfBXw9Z2r+7qN0ZMAmniwa1DnbL9uDu9in7J2Rv0BuCuvwNS8PhFJ2pZMDvbW5Q2pTeaQR25o7xrFvr2Yv80GMl/DaE9PvX+TUQm0UwMuuI/O3aQfDWhrGbhVRtKZYeQ1yEumm01mB9CXHpfaZNJZcqIPzN9KuQAY0KKyOeVGwzDe+w/jBiJf7jCWlq8n1GjivsnyjnavaYxDIpNNZl9bUc2yxBox7CHMY+avU7MtTBhiIBB/dpJEmHKwC046Lks14r3ol8DUhvg+vT2N6o3/lkLq047dWtS/FIAxO2Kc1WNkq9bEDqRGsFCpXlPgJ6FZvo6K7mlWt+sUN+rPSvsy6nvHgbF9h/+st1HTTp2+ucfi7dLp8r8q7mlzJjyV64KcascKxpQVj51lYZ6sbRKyiVru/1RS5oje/ULxidK94mPcgu/qkMvofI4h6/abaRW/8a9bAeaL6V1aSxcmyJ8TCL27Yv1vaQ48GTkFZ0fOa5HFYMFSW+YME2aCXZtnOUb/UJPHaVf6QUDir/W5v3EKBmmw2IMw=
+  app: pic2map
