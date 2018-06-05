@@ -7,12 +7,19 @@ export default class WorkspaceCreator extends React.Component {
     }
 
     createAndForwardToNewWorkspace() {
-        // TODO fix fetch url and create ID on server
-        /* fetch('https://randomuser.me/api/')
-             .then(({workspaceId}) => forwardToWorkspace(workspaceId));*/
-        setTimeout(() => {
-            this.forwardToWorkspace('test')
-        }, 3000);
+        fetch('/api/workspace', {method: 'POST'})
+            .then((res) => {
+                res.json()
+                    .then((res) => {
+                        this.forwardToWorkspace(res.id)
+                    })
+                    .catch(() => {
+                        console.error("Could not parse response");
+                    })
+            })
+            .catch(() => {
+                console.error("Could not generate new workspace");
+            });
     }
 
     forwardToWorkspace(workspaceId) {
