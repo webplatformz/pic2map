@@ -1,13 +1,9 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import './Header.css';
 
 const Header = () => (
     <header>
-        <nav>
-            <Link to='/'>Home</Link>
-            <Link to='/map'>Map</Link>
-        </nav>
+        Pic2Map - A small app which shows uploaded photos on a map according to their Exif-Data.
     </header>
 );
 

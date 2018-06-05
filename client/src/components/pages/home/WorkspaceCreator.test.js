@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './Home';
+import WorkspaceCreator from './WorkspaceCreator';
 
-describe('Home', () => {
+describe('WorkspaceCreator', () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<Home/>, div);
+        ReactDOM.render(<WorkspaceCreator/>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 });

@@ -1,7 +1,6 @@
 import React from 'react'
-import './Home.css'
 
-export default class Home extends React.Component {
+export default class WorkspaceCreator extends React.Component {
 
     componentDidMount() {
         this.createAndForwardToNewWorkspace();
