@@ -26,3 +26,4 @@ const port = process.env.PORT || 8080;
 app.listen(port);
 
 console.log(`Pic2Map listening on ${port}`);
+module.exports = app; // for testing
