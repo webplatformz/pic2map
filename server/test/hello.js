@@ -3,8 +3,9 @@ process.env.NODE_ENV = 'test';
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let server = require('../server');
+let server = require('../index');
 let should = chai.should();
+let expect = chai.expect;
 
 chai.use(chaiHttp);
 
@@ -17,8 +18,8 @@ describe('/GET api/hello', () => {
             .get('/api/hello')
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.should.be.a('array');
-                res.body.length.should.be.eql(0);
+                expect(res.body.msg).to.equal('Hello World!!');
+                //res.body.length.should.be.eql(0);
                 done();
             });
     });
