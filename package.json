@@ -14,7 +14,9 @@
     "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
     "build:client": "cd client && npm run build",
     "build:prod": "rimraf server/client && mkdirp server/client && npm run build:client && cpx client/build/**/*.* server/client",
-    "test": "concurrently \"cd client && npm test\" \"cd server && npm test\""
+    "test:client": "cd client && npm test",
+    "test:server": "cd server && npm test",
+    "test": "concurrently \"npm run test:client\" \"npm run test:server\""
   },
   "devDependencies": {
     "concurrently": "3.5.1",
