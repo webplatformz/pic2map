@@ -1,0 +1,10 @@
+nav {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 50px;
+}
+
+nav > a {
+    width: 200px;
+}
