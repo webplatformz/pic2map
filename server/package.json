@@ -4,7 +4,8 @@
   "description": "The server part of pic2map",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "author": "",
   "license": "MIT",
@@ -12,5 +13,10 @@
     "body-parser": "1.18.3",
     "express": "4.16.3",
     "multer": "1.3.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0"
   }
 }

@@ -13,8 +13,7 @@
     "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
     "build:client": "cd client && npm run build",
     "build:prod": "rimraf server/client && mkdirp server/client && npm run build:client && cpx client/build/**/*.* server/client",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "cd client && react-scripts test --env=jsdom"
   },
   "devDependencies": {
     "concurrently": "3.5.1",
