@@ -24,6 +24,11 @@ app.post('/api/workspace', (req, res) => {
     res.json(workspace);
 });
 
+app.delete('/api/workspace', (req, res) => {
+    // TODO Delete workspace and pictures in DB.
+    res.sendStatus(204);
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
