@@ -7,11 +7,17 @@ cache:
   - client/node_modules
   - server/node_modules
 install:
-  - npm run install:all
+- npm run install:all
 script:
-  - npm run test:ci
+- npm run test:ci
 deploy:
   provider: heroku
   api_key:
     secure: VevPwJijY23pmoN4qT9u+jruvA1Ho1kKULtes26BdGQyivEK7b4JZ7hINO4Nw3+QCceusfhHS7SIRiCWNQ6aMvUHHDOVo59pk918QzfzgGXGjIeXqlur0donQbFa2QqhjNk4IH+ZvBeKocnQY9/1eIUQA6XJB3f1zMMFnJXu1V9fWvKl9snxvsBem3E4CySM21eE0tWt9FCd/47Koli1yww1pTQaFNmgQWYlkKDxNBdJswwu0IhIzpvcpMT7zRlcXqnsKbGutvuPmZlRRIHMxniakld3NQM90mMMaXkBo6APWWns0/6hQ1tJEDvy07Y7akRGNNDDWrr/SRrr2ODcTV2eDxFguW5i3xcg3eDLXBqPbx7E77dQjOqLqIIwCM71NSQ0T2qlt3uSk7WuHVRXMZm/fThHRUJwUZdKuvPUBTzP+t1i0onasDyYA4KhShwiSKQmW4daH0RHdDNAiKiZH4jVqdiONGhPdrsKsAGCWomXmVTabRtpEdZYl9FBEkQGW/bw6QrbAbEzoYLowP6ZBZ8pGLAOPBWOpj5d9TmWZXEHEc1T0ZWIj92gtUvU5lvNkZWPRkW1U3fJ7AqGHyIva2lRQChbw7C8Md/4EzCFct6TiIDtIeMszG4eyCpsUZjHighId5FUDuaGV8Jd9ltENryyxe2b6F54sFnARPAaWs4=
   app: pic2map
+notifications:
+  email: false
+  slack:
+    on_success: always
+    on_failure: always
+    secure: CRSjgS7i7rFXtZWsP6/YEo1Vgl7f59nKwKtPbwSjRskwlZzH4s4MGyAn0JPlXiB3+tCeYCyoH0RDAIwO4KcoaZPP0nxZCTsx+meWhh8Vtoyl80RRVNVcNJ8fTJ+1XdTF4rCv0cTTEm+4oSnh/dnCBuCtU60lVjUr6VpqrFmMumYR2w8FtAUEtkFiC2n0WtMKuAgUoBoaMpcO9tApO5mvK5Te0ALmGMgwt94jB4VY4lvwn/Z78bPOxt4TuwmzZNJz+yE9zroCfKJFHTWPIBG+U5QRpKJB2g1zr0+x9ecaowA3xyWJWewFGrynO5eIOI67gzQzToQlB/78jzgFuqgcKt2/XkCqLvo8f1+0up1wbmpKXznq71RdjHfJcSEh6HL5M9I/kkjY5uxnT5aF9ddL9N/zLuoo4s/MQJ6g6+6ZBx2unUihfNx7rNtB/+BloEb6iYps21hbkRNt7+v2DSFKsWY8iXl7YQhiAsB0ba3FqHOH4eYB8VK/L8ci09x9lzh+MrXM+RIBACmgSVgWIBwlLjDwfwjcObTmM3o9RtiF9oShNQGUGmAzl2sRLaUMVQ58/CV6DKmDGAKwDR8ghUEOBSHcJcip5TAbFBbhGoxGeYnLXv+/TrE/s1r6iKaCGb7NQaRWpFnO+2ckbtakBWdLDm81kjCo2G3opURaucRjezc=
