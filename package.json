@@ -11,7 +11,6 @@
     "install": "cd client && npm install && cd ../server && npm install",
     "start": "cd client && npm start",
     "build": "cd client && npm build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "cd client && react-scripts test --env=jsdom"
   }
 }
