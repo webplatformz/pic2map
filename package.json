@@ -8,6 +8,7 @@
   },
   "private": true,
   "scripts": {
+    "install": "cd client && npm install && cd ../server && npm install",
     "start": "cd client && npm start",
     "build": "cd client && npm build",
     "test": "react-scripts test --env=jsdom",
