@@ -1,6 +1,11 @@
 {
   "name": "pic2map",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webplatformz/pic2map.git"
+  },
   "private": true,
   "scripts": {
     "start": "cd client && npm start",
