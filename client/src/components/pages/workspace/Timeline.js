@@ -38,7 +38,7 @@ class Timeline extends React.Component {
     }
 }
 
-function mapsStateToProps(state, ownProps) {
+function mapsStateToProps(state) {
     return {
         images: state.trip.images
     };
