@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-console.log('Connecting to DB with ENV value from MONGODB_URI');
+console.log('Connecting to DB with ENV value from MONGODB_URI - ' + process.env.MONGODB_URI);
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -48,10 +48,10 @@ var TripSchema = mongoose.Schema({
 });
 
 module.exports = {
-    getTripById : function () {
+    getTripById : function (key) {
         var Trip = db.model('Trip', TripSchema);
         return Trip
-            .findOne({key: '123456abcuuid'})
+            .findOne({key: key})
             .then(function(trip) {
                 return trip;
             })
