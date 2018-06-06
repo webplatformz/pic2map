@@ -8,13 +8,47 @@ const accessToken = 'pk.eyJ1IjoibWxlaW1lciIsImEiOiJjamkxY2t1M3owamlkM3BwaWhndGVp
 export class Map extends React.Component {
 
     componentDidMount() {
-        const mymap = L.map('map').setView([51.505, -0.09], 13);
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Workspace data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        // OSM Street
+        const osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
-            id: 'mapbox.streets',
+            attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a>',
+        });
+        // OSM outdoors
+        const osmOutdoorsLayer = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=607960444b2e4a9787416bc54a1cc34e', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a>',
+        });
+
+        // MapBox Satellite
+        const mbSatelliteLayer = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={accessToken}', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://mapbox.com">MapBox</a>',
             accessToken: accessToken
-        }).addTo(mymap);
+        });
+
+        // MapBox Outdoors
+        const mbOutdoorsLayer = L.tileLayer('https://api.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}.png?access_token={accessToken}', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://mapbox.com">MapBox</a>',
+            accessToken: accessToken
+        });
+
+        const leafletMap = L.map('map')
+            .setView([47.29040794, 8.52401733], 12) // center roughly on Zurich ;)
+            .addLayer(mbSatelliteLayer)
+            .addLayer(osmLayer)
+            .addLayer(mbOutdoorsLayer)
+            .addLayer(osmOutdoorsLayer);
+
+        // leaflet control to choose base layer and toggle markers
+        L.control
+            .layers({
+                'Open Street Map': osmLayer,
+                'MapBox Satellite': mbSatelliteLayer,
+                'MapBox Outdoors': mbOutdoorsLayer,
+                'Open Street Map Outdoors': osmOutdoorsLayer
+            })
+            .addTo(leafletMap);
     }
 
     render() {
