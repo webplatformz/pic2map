@@ -8,11 +8,6 @@ import {connect} from "react-redux";
 
 class Workspace extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.deleteWorkspace = this.deleteWorkspace.bind(this);
-    }
-
     componentDidMount() {
         getTrip(this.props.match.params.id)
             .then(response => {
@@ -23,17 +18,6 @@ class Workspace extends React.Component {
             .catch(error => console.error(error));
     }
 
-    deleteWorkspace() {
-        const id = this.props.match.params.id;
-        fetch(`/api/workspace/${id}`, {method: 'DELETE'})
-            .then(() => {
-                this.props.history.push('/');
-            })
-            .catch(() => {
-                console.error("Could not delete workspace");
-            });
-    }
-
     render() {
         return (
             <div>
@@ -41,9 +25,6 @@ class Workspace extends React.Component {
                     <Map/>
                     <Timeline/>
                 </div>
-                <button onClick={this.deleteWorkspace}>
-                    Workspace löschen
-                </button>
             </div>
         );
     }

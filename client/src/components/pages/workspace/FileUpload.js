@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Dropzone from 'react-dropzone'
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {connect} from "react-redux";
 
@@ -64,10 +63,6 @@ class FileUpload extends Component {
         );
     }
 }
-
-FileUpload.propTypes = {
-    workspaceId: PropTypes.string.isRequired
-};
 
 export default connect(
     state => ({
