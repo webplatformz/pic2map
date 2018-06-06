@@ -1,7 +1,6 @@
 import {LOAD_TRIP_SUCCESSFUL} from "../actions/tripActions";
 
-const defaultState = {images: []};
-export default function tripReducer(state = defaultState, action) {
+export default function tripReducer(state={}, action) {
     switch (action.type) {
 
         case LOAD_TRIP_SUCCESSFUL:
