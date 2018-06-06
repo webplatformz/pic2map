@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const guid = require('./util/guid');
+const mongoClient = require('./persistance/mongoClient');
 const multer  = require('multer');
 
 const app = express();
@@ -30,7 +31,12 @@ app.post('/api/workspace', (req, res) => {
 });
 
 app.get('/api/workspace/:id', function (req, res) {
-    res.send(req.params)
+    mongoClient.getTripById()
+        .then(function(item) {
+            console.log(item);
+            res.send(item);
+        });
+    //mongoClient.insertMockData();
 });
 
 app.post('/api/workspace/:id/picture', upload.array('pictures'), function (req, res) {
