@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import {connect} from "react-redux";
 
 const UploadBox = styled.div`
   margin-top: 20px;
@@ -39,7 +40,7 @@ class FileUpload extends Component {
         const formData  = new FormData();
         pictures.forEach(picture => formData.append('pictures', picture, picture.name));
 
-        fetch(`/api/workspace/${this.props.match.params.id}/picture`, {
+        fetch(`/api/workspace/${this.props.key}/picture`, {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -68,4 +69,8 @@ FileUpload.propTypes = {
     workspaceId: PropTypes.string.isRequired
 };
 
-export default FileUpload;
+export default connect(
+    state => ({
+        key: state.trip.key
+    })
+)(FileUpload);
