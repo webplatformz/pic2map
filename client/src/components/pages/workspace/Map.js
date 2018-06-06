@@ -40,7 +40,7 @@ class Map extends React.Component {
             accessToken: accessToken
         });
 
-        const imageLayerGroup = new L.LayerGroup();
+        const imageLayerGroup = new L.markerClusterGroup();
 
         const map = L.map('map')
             .setView([47.29040794, 8.52401733], 12) // center roughly on Zurich ;)
@@ -62,28 +62,27 @@ class Map extends React.Component {
             })
             .addTo(map);
 
-        const markers = L.markerClusterGroup();
+        const workspaceId = this.props.workspace.key;
         for (const image of this.props.workspace.images) {
-                 const icon = L.icon({
-                     iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-                     iconSize:     [38, 95], // size of the icon
-                     iconAnchor:   [22, 94],
-                     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-                 });
+            const icon = L.icon({
+                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                /*iconUrl: `/api/workspace/${workspaceId}/picture/${image.key}`,*/
+                iconSize: [38, 95], // size of the icon
+                iconAnchor: [22, 94],
+                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
 
-            //const marker = L.marker(image.geo.geometry.coordinates);
             const marker = L.marker([image.location.lat, image.location.lng]);
-                 marker.setIcon(icon);
-                 marker.bindPopup('<img src="https://leafletjs.com/examples/custom-icons/leaf-green.png"/>');
-                 marker.on('mouseover', function (e) {
-                     this.openPopup();
-                 });
-                 marker.on('mouseout', function (e) {
-                     this.closePopup();
-                 });
-                 marker.addTo(markers);
+            marker.setIcon(icon);
+            marker.bindPopup('<img src="/api/workspace/' + workspaceId + '/picture/' + image.key + '"/>');
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
+            marker.addTo(imageLayerGroup);
         }
-        map.addLayer(markers)
     }
 
     render() {
