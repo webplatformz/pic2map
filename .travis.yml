@@ -1,16 +1,17 @@
 language: node_js
 node_js:
-- '10'
+  - '10'
 cache:
   directories:
   - node_modules
   - client/node_modules
   - server/node_modules
 
-before_instll:
-- export TZ=Europe/Paris
+before_insatll:
+  - export TZ=Europe/Zurich
+  - date
 script:
-- npm run test:ci
+  - npm run test:ci
 deploy:
   provider: heroku
   api_key:
