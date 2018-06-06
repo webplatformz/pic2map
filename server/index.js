@@ -24,7 +24,7 @@ app.post('/api/workspace', (req, res) => {
     res.json(workspace);
 });
 
-app.delete('/api/workspace', (req, res) => {
+app.delete('/api/workspace/:id', (req, res) => {
     // TODO Delete workspace and pictures in DB.
     res.sendStatus(204);
 });
