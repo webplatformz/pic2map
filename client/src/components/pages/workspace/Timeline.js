@@ -2,6 +2,7 @@ import React from 'react';
 import './Timeline.css'
 import * as moment from 'moment';
 import {connect} from "react-redux";
+import FileUpload from "./FileUpload";
 
 class ImageElement extends React.Component {
     render() {
@@ -9,7 +10,8 @@ class ImageElement extends React.Component {
 
         return (
             <div className="image-container">
-                <img src="https://www.amv-mz.de/wp-content/themes/oria-child/images/placeholder.png"/>
+                <img alt="Placeholder"
+                     src="https://www.amv-mz.de/wp-content/themes/oria-child/images/placeholder.png"/>
                 <div className="content">
                     <h3>{date.format('ddd, DD.MM.YYYY')}</h3>
                     <p>{this.props.image.title}</p>
@@ -29,6 +31,7 @@ class Timeline extends React.Component {
         const imageElements = this.props.images.map(image => <li key={image.key}>{this.renderImageElement(image)}</li>);
         return (
             <div className="timeline-container">
+                <FileUpload/>
                 <h1>Timeline</h1>
                 <ul>
                     {imageElements}
@@ -38,10 +41,8 @@ class Timeline extends React.Component {
     }
 }
 
-function mapsStateToProps(state) {
-    return {
+export default connect(
+    state => ({
         images: state.trip.images
-    };
-}
-
-export default connect(mapsStateToProps)(Timeline);
+    })
+)(Timeline);

@@ -1,9 +1,31 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import Dropzone from 'react-dropzone';
+import styled from 'styled-components';
+
 import {getTrip} from '../../../middleware/api';
-import {loadTripSuccessful} from "../../../actions/tripActions";
+import {loadTripSuccessful} from '../../../actions/tripActions';
+
+const UploadBox = styled.div`
+  margin-top: 20px;
+  background-color: white;
+  outline: 2px dashed black;
+  outline-offset: -2px;
+  
+  .dropzone-container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dropzone-container div{
+    width: 50%;
+    text-align: center;
+    
+  }
+  `;
 
 
 class FileUpload extends Component {
@@ -21,13 +43,13 @@ class FileUpload extends Component {
         const formData = new FormData();
         pictures.forEach(picture => formData.append('pictures', picture, picture.name));
 
-        fetch(`/api/workspace/${this.props.workspaceId}/picture`, {
+        fetch(`/api/workspace/${this.props.tripId}/picture`, {
             method: 'POST',
             body: formData
         }).then(response => {
             if (response.ok) {
                 // Reload data
-                getTrip(this.props.workspaceId)
+                getTrip(this.props.tripId)
                     .then(response => response.json().then(this.props.loadTripSuccessful))
                     .catch(error => console.error(error));
             } else {
@@ -39,25 +61,24 @@ class FileUpload extends Component {
     render() {
         return (
             <section>
-                <div className="dropzone">
-                    <Dropzone onDrop={this.onDrop.bind(this)}>
-                        <p>Try dropping some files here, or click to select files to upload.</p>
+                <UploadBox>
+                    <Dropzone className="dropzone-container" onDrop={this.onDrop.bind(this)}>
+                        <div>Drop items here</div>
                     </Dropzone>
-                </div>
-                <aside>
-                    <h2>Dropped files</h2>
-                    <ul>{this.state.files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)}</ul>
-                </aside>
+                </UploadBox>
             </section>
         );
     }
 }
 
 FileUpload.propTypes = {
-    workspaceId: PropTypes.string.isRequired
+    tripId: PropTypes.string,
+    loadTripSuccessful: PropTypes.func.isRequired
 };
 
 export default connect(
-    () => ({}),
+    state => ({
+        tripId: state.trip.key
+    }),
     {loadTripSuccessful}
 )(FileUpload);
