@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types';
+import {getTrip} from '../../../middleware/api';
+import {loadTripSuccessful} from "../../../actions/tripActions";
 
 
 class FileUpload extends Component {
     constructor() {
         super();
-        this.state = { files: [] };
+        this.state = {files: []};
     }
 
     onDrop(files) {
@@ -15,7 +18,7 @@ class FileUpload extends Component {
     }
 
     uploadPictures(pictures) {
-        const formData  = new FormData();
+        const formData = new FormData();
         pictures.forEach(picture => formData.append('pictures', picture, picture.name));
 
         fetch(`/api/workspace/${this.props.workspaceId}/picture`, {
@@ -24,6 +27,9 @@ class FileUpload extends Component {
         }).then(response => {
             if (response.ok) {
                 // Reload data
+                getTrip(this.props.workspaceId)
+                    .then(response => response.json().then(this.props.loadTripSuccessful))
+                    .catch(error => console.error(error));
             } else {
                 console.warn('Could not upload files');
             }
@@ -51,4 +57,7 @@ FileUpload.propTypes = {
     workspaceId: PropTypes.string.isRequired
 };
 
-export default FileUpload;
+export default connect(
+    () => ({}),
+    {loadTripSuccessful}
+)(FileUpload);

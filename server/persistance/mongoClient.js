@@ -54,7 +54,7 @@ function addPicturesToTrip(tripId, pictures) {
         };
     });
 
-    getTripById(tripId).then(trip => {
+    return getTripById(tripId).then(trip => {
         const tripToUpdate = trip || new Trip({
             name: 'New trip',
             key: tripId,
