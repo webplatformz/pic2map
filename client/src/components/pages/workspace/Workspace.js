@@ -2,6 +2,7 @@ import React from 'react'
 import {Map} from './Map';
 import {Timeline} from './Timeline';
 import FileUpload from './FileUpload';
+import './Workspace.css';
 
 export default class Workspace extends React.Component {
 
