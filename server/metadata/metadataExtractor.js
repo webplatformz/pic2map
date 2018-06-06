@@ -1,6 +1,7 @@
 const exif = require('exif');
+const Promise = require('bluebird');
 
-function pickField(exifData) {
+function pickFields(exifData) {
     const lat = convertDMSToDD(exifData.gps.GPSLatitude, exifData.gps.GPSLatitudeRef);
     const lng = convertDMSToDD(exifData.gps.GPSLongitude, exifData.gps.GPSLongitudeRef);
     return {
@@ -29,23 +30,15 @@ function convertToUnixTs(dateString) {
     return new Date(`${dateParts.join('-')}T${timeParts.join(':')}`).getTime() / 1000;
 }
 
-function extract(imageBuffer, cb) {
-
-
-    try {
-        new exif.ExifImage({
-            image: imageBuffer
-        }, (error, exifData) => {
-            if (error) {
-                cb(error);
-            }
-            else {
-                cb(null, pickField(exifData));
-            }
-        });
-    } catch (error) {
-        cb(error);
-    }
+/**
+ * extracts coordinates in decimal format and timestamp in unix seconds from given jpg image buffer
+ *
+ * @param imageBuffer
+ */
+function extract(imageBuffer) {
+    return Promise
+        .fromCallback((cb) => new exif.ExifImage({image: imageBuffer}, cb))
+        .then(pickFields);
 }
 
 module.exports = {
