@@ -6,6 +6,9 @@ cache:
   - node_modules
   - client/node_modules
   - server/node_modules
+
+before_instll:
+- export TZ=Europe/Paris
 script:
 - npm run test:ci
 deploy:
