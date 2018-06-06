@@ -9,7 +9,6 @@ describe('metadataExtractor', () => {
 
         return readFile(path.resolve(__dirname, 'testImage.jpg'))
             .then((buffer) => {
-
                 return metadataExtractor.extract(buffer)
                     .then((metadata) => {
 
@@ -29,8 +28,19 @@ describe('metadataExtractor', () => {
                         chai.expect(metadata.timestamp).to.equal(1527851981);
 
                     });
+            });
+    });
 
+    it('it should reject if no exif data is present in given buffer', () => {
 
+        return readFile(path.resolve(__dirname, 'noExifTestImage.jpg'))
+            .then((buffer) => {
+                return metadataExtractor.extract(buffer)
+                    .then(() => Promise.reject('Should not extract any data from image with no exif segment'))
+                    .catch((err) => {
+                        chai.expect(err.message).to.equal('No Exif segment found in the given image.');
+                        return Promise.resolve('This is expected');
+                    })
             });
 
 
