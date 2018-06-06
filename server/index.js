@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const guid = require('./util/guid');
 
 const app = express();
 
@@ -19,20 +20,29 @@ app.get('/api/hello', (req, res) => {
 app.post('/api/workspace', (req, res) => {
     // TODO store it in DB.
     const workspace = {
-        id: guid()
+        id: guid.generate()
     };
     res.json(workspace);
 });
 
-app.delete('/api/workspace', (req, res) => {
+app.get('/api/workspace/:id', function (req, res) {
+    res.send(req.params)
+});
+
+app.delete('/api/workspace/:id', (req, res) => {
     // TODO Delete workspace and pictures in DB.
     res.sendStatus(204);
+});
+
+app.delete('/api/clear-all-data', (req, res) => {
+    // TODO Just for dev use -> to be deleted afterwards
+
 });
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + 'client/index.html'));
+    res.sendFile(path.join(__dirname + '/client/index.html'));
 });
 
 const port = process.env.PORT || 8080;
@@ -40,13 +50,3 @@ app.listen(port);
 
 console.log(`Pic2Map listening on ${port}`);
 module.exports = app; // for testing
-
-function guid() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
