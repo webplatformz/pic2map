@@ -40,7 +40,11 @@ app.get('/api/workspace/:id', function (req, res) {
                 res.send(item);
             }
             else {
-                res.sendStatus(404);
+                var emptyTrip = {
+                    key:tripKey,
+                    images: []
+                };
+                res.send(emptyTrip);
             }
         })
         .catch((err) => {

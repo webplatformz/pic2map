@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-console.log('Connecting to DB with ENV value from MONGODB_URI - ' + process.env.MONGODB_URI);
+console.log('Connecting to DB with ENV value from MONGODB_URI');
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -13,37 +13,17 @@ db.once('open', function() {
 
 
 
-/*
-Example GEOJSON
-{
-  "type": "Feature",
-  "geometry": {
-    "type": "Point",
-    "coordinates": [125.6, 10.1]
-  },
-  "properties": {
-    "name": "Dinagat Islands"
-  }
-}
-*/
-
 var TripSchema = mongoose.Schema({
     name : String,
     key : String,
     images : [{
-        geo : {
-            geoType : String,
-            geometry : {
-                coordType : String,
-                coordinates: [Number]
-            },
-            properties : {
-                name:String
-            }
-        },
         key : String,
-        dateIso : String,
-        dateTicks : String
+        location: {
+            lat: Number,
+            lng: Number
+        },
+        filename: String,
+        timestamp : Number
     }]
 });
 
@@ -68,19 +48,13 @@ module.exports = {
             key:'123456abcuuid',
             images: [
             {
-                geo:{
-                    geoType: 'Feature',
-                    geometry: {
-                        coordType: 'Point',
-                        coordinates: [125.6, 10.1]
-                    },
-                    properties: {
-                        name: 'Bora Bora'
-                    }
+                location: {
+                    lat: 47.366667,
+                    lng: 8.55
                 },
-                key:'424242imgeuuid',
-                dateIso:'2007-12-24T18:21Z',
-                dateTicks:'1198520460'
+                filename: "Elephant.jpg",
+                timestamp: 1198520460,
+                key:'424242imgeuuid'
             }
         ]});
 
