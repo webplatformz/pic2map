@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const guid = require('./util/guid');
 const mongoClient = require('./persistance/mongoClient');
-const {extract} = require('./metadata/metadataExtractor');
 const multer = require('multer');
 
 const app = express();
@@ -25,44 +24,29 @@ app.get('/api/hello', (req, res) => {
 
 app.post('/api/workspace', (req, res) => {
     // TODO store it in DB.
-    const workspace = {
-        id: guid.generate()
-    };
-    res.json(workspace);
+    res.json({id: guid.generate()});
 });
 
 app.get('/api/workspace/:id', function (req, res) {
-    var tripKey = req.params.id;
+    const tripKey = req.params.id;
     mongoClient.getTripById(tripKey)
-        .then(function (item) {
+        .then(item => {
             console.log(item);
-            if (item) {
-                res.send(item);
-            }
-            else {
-                var emptyTrip = {
-                    key:tripKey,
-                    images: []
-                };
-                res.send(emptyTrip);
-            }
+
+            res.send(item || {
+                key:tripKey,
+                images: []
+            });
         })
-        .catch((err) => {
+        .catch(() => {
             res.sendStatus(400);
         });
     //mongoClient.insertMockData();
 });
 
-app.post('/api/workspace/:id/picture', upload.array('pictures'), function (req, res) {
-    console.log('Workspace ID:', req.params.id);
-
-    req.files.forEach((file, index) => {
-        extract(file.buffer).then((metadata) => {
-            console.log('Index:', index, 'filename:', file.originalname, 'mimetype', file.mimetype, 'meta', metadata, 'buffer:', file.buffer);
-        });
-    });
-
-    res.sendStatus(201)
+app.post('/api/workspace/:id/picture', upload.array('pictures'), async (req, res) => {
+    await mongoClient.addPicturesToTrip(req.params.id, req.files);
+    res.sendStatus(200);
 });
 
 app.get('/api/workspace/:id/picture/:pictureId', function (req, res) {

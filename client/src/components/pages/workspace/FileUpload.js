@@ -22,7 +22,11 @@ class FileUpload extends Component {
             method: 'POST',
             body: formData
         }).then(response => {
-            console.log(response.json())
+            if (response.ok) {
+                // Reload data
+            } else {
+                console.warn('Could not upload files');
+            }
         });
     }
 
