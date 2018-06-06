@@ -1,6 +1,5 @@
 import React from 'react'
 import {createWorkspace} from "../../../middleware/api";
-import {workspaceCreated} from "../../../actions/tripActions";
 
 export default class WorkspaceCreator extends React.Component {
 

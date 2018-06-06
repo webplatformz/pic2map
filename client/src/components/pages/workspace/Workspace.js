@@ -1,7 +1,6 @@
 import React from 'react'
 import Map from './Map';
 import Timeline from './Timeline';
-import FileUpload from './FileUpload';
 import './Workspace.css';
 import {loadTripSuccessful} from "../../../actions/tripActions";
 import {getTrip} from "../../../middleware/api";
@@ -18,7 +17,7 @@ class Workspace extends React.Component {
         getTrip(this.props.match.params.id)
             .then(response => {
                 response.json().then(value => {
-                    this.props.dispatch(loadTripSuccessful(value));
+                    this.props.loadTripSuccessful(value);
                 });
             })
             .catch(error => console.error(error));
@@ -42,10 +41,6 @@ class Workspace extends React.Component {
                     <Map/>
                     <Timeline/>
                 </div>
-                <div>
-                    <h2> File upload </h2>
-                    <FileUpload workspaceId={this.props.match.params.id}/>
-                </div>
                 <button onClick={this.deleteWorkspace}>
                     Workspace löschen
                 </button>
@@ -54,11 +49,10 @@ class Workspace extends React.Component {
     }
 }
 
-function mapsStateToProps(state, ownProps) {
-    return {
+export default connect(
+    state => ({
         key: state.trip.key
-    };
-}
-
-export default connect(mapsStateToProps)(Workspace);
+    }),
+    {loadTripSuccessful}
+)(Workspace);
 
