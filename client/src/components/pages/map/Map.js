@@ -8,6 +8,12 @@ const MapBox = ReactMapboxGl({
 
 const Map = () => (
     <div>
+        <div>Please kindly note, that you agree that we may process and store your pictures and meta data once you
+            choose to upload any pictures. Please note that your pictures can be accessed publicly and may be stored and
+            processed by third parties, including those located in other countries. Please do not use this website, if
+            you do not agree to that.
+        </div>
+        <div>DELETE WORKSPACE - TODO link</div>
         <MapBox // eslint-disable-next-line
             style="mapbox://styles/mapbox/streets-v8"
             containerStyle={{width: '100vw', height: '100vh'}}
