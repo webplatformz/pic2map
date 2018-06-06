@@ -2,12 +2,13 @@ const express = require('express');
 const path = require('path');
 const guid = require('./util/guid');
 const mongoClient = require('./persistance/mongoClient');
-const multer  = require('multer');
+const {extract} = require('./metadata/metadataExtractor');
+const multer = require('multer');
 
 const app = express();
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({storage: storage});
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client')));
@@ -33,7 +34,7 @@ app.post('/api/workspace', (req, res) => {
 app.get('/api/workspace/:id', function (req, res) {
     var tripKey = req.params.id;
     mongoClient.getTripById(tripKey)
-        .then(function(item) {
+        .then(function (item) {
             console.log(item);
             if (item) {
                 res.send(item);
@@ -44,7 +45,7 @@ app.get('/api/workspace/:id', function (req, res) {
         })
         .catch((err) => {
             res.sendStatus(400);
-    });
+        });
     //mongoClient.insertMockData();
 });
 
@@ -52,7 +53,9 @@ app.post('/api/workspace/:id/picture', upload.array('pictures'), function (req, 
     console.log('Workspace ID:', req.params.id);
 
     req.files.forEach((file, index) => {
-        console.log('Index:', index, 'filename:', file.originalname, 'mimetype', file.mimetype, 'buffer:', file.buffer);
+        extract(file.buffer).then((metadata) => {
+            console.log('Index:', index, 'filename:', file.originalname, 'mimetype', file.mimetype, 'meta', metadata, 'buffer:', file.buffer);
+        });
     });
 
     res.sendStatus(201)
