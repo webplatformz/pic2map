@@ -3,12 +3,25 @@ import {Map} from './Map';
 import Timeline from './Timeline';
 import FileUpload from './FileUpload';
 import './Workspace.css';
+import {loadTripSuccessful} from "../../../actions/tripActions";
+import {getTrip} from "../../../middleware/api";
+import {connect} from "react-redux";
 
-export default class Workspace extends React.Component {
+class Workspace extends React.Component {
 
     constructor(props) {
         super(props);
         this.deleteWorkspace = this.deleteWorkspace.bind(this);
+    }
+
+    componentDidMount() {
+        getTrip('123456abcuuid')
+            .then(response => {
+                response.json().then(value => {
+                    this.props.dispatch(loadTripSuccessful(value));
+                });
+            })
+            .catch(error => console.error(error));
     }
 
     deleteWorkspace() {
@@ -40,4 +53,6 @@ export default class Workspace extends React.Component {
         );
     }
 }
+
+export default connect()(Workspace);
 

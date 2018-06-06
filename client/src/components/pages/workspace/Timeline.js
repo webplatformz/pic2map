@@ -1,7 +1,6 @@
 import React from 'react';
 import './Timeline.css'
 import * as moment from 'moment';
-import * as tripActions from "../../../actions/tripActions";
 import {connect} from "react-redux";
 
 class ImageElement extends React.Component {
@@ -21,11 +20,7 @@ class ImageElement extends React.Component {
 }
 
 class Timeline extends React.Component {
-
-    componentDidMount() {
-        this.props.dispatch(tripActions.loadTrip());
-    }
-
+    
     renderImageElement(image) {
         return <ImageElement image={image}/>
     }
