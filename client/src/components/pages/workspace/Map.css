@@ -1,0 +1,9 @@
+#map {
+    width: 100%;
+    height: 1000px;
+}
+
+#map-container {
+    flex-basis: 800px;
+    flex-grow: 2;
+}
