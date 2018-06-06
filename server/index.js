@@ -16,9 +16,22 @@ app.get('/api/hello', (req, res) => {
     res.json(helloWorld);
 });
 
+app.post('/api/workspace', (req, res) => {
+    // TODO store it in DB.
+    const workspace = {
+        id: guid()
+    };
+    res.json(workspace);
+});
+
+app.delete('/api/workspace', (req, res) => {
+    // TODO Delete workspace and pictures in DB.
+    res.sendStatus(204);
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + 'client/index.html'));
 });
 
@@ -27,3 +40,13 @@ app.listen(port);
 
 console.log(`Pic2Map listening on ${port}`);
 module.exports = app; // for testing
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
