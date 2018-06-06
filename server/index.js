@@ -31,11 +31,20 @@ app.post('/api/workspace', (req, res) => {
 });
 
 app.get('/api/workspace/:id', function (req, res) {
-    mongoClient.getTripById()
+    var tripKey = req.params.id;
+    mongoClient.getTripById(tripKey)
         .then(function(item) {
             console.log(item);
-            res.send(item);
-        });
+            if (item) {
+                res.send(item);
+            }
+            else {
+                res.sendStatus(404);
+            }
+        })
+        .catch((err) => {
+            res.sendStatus(400);
+    });
     //mongoClient.insertMockData();
 });
 
