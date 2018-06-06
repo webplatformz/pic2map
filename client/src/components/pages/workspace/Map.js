@@ -64,24 +64,26 @@ class Map extends React.Component {
 
         const workspaceId = this.props.workspace.key;
         for (const image of this.props.workspace.images) {
-            const icon = L.icon({
-                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-                /*iconUrl: `/api/workspace/${workspaceId}/picture/${image.key}`,*/
-                iconSize: [38, 95], // size of the icon
-                iconAnchor: [22, 94],
-                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
-            });
+            if (image.location && image.location.lat && image.location.lng) {
+                const icon = L.icon({
+                    iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                    /*iconUrl: `/api/workspace/${workspaceId}/picture/${image.key}`,*/
+                    iconSize: [38, 95], // size of the icon
+                    iconAnchor: [22, 94],
+                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                });
 
-            const marker = L.marker([image.location.lat, image.location.lng]);
-            marker.setIcon(icon);
-            marker.bindPopup('<img src="/api/workspace/' + workspaceId + '/picture/' + image.key + '"/>');
-            marker.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            marker.on('mouseout', function (e) {
-                this.closePopup();
-            });
-            marker.addTo(imageLayerGroup);
+                const marker = L.marker([image.location.lat, image.location.lng]);
+                marker.setIcon(icon);
+                marker.bindPopup(`<img src="/api/workspace/${workspaceId}/picture/${image.key}"/>`);
+                marker.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                marker.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                marker.addTo(imageLayerGroup);
+            }
         }
     }
 
