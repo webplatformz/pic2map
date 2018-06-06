@@ -7,7 +7,7 @@ const Main = () => (
     <main>
         <Switch>
             <Route exact path='/' component={WorkspaceCreator}/>
-            <Route path='/map' component={Map}/>
+            <Route path='/map/:id' component={Map}/>
         </Switch>
     </main>
 );

@@ -2,8 +2,9 @@ import React from 'react'
 
 export default class WorkspaceCreator extends React.Component {
 
-    componentDidMount() {
-        this.createAndForwardToNewWorkspace();
+    constructor(props) {
+        super(props);
+        this.createAndForwardToNewWorkspace = this.createAndForwardToNewWorkspace.bind(this);
     }
 
     createAndForwardToNewWorkspace() {
@@ -29,7 +30,23 @@ export default class WorkspaceCreator extends React.Component {
     render() {
         return (
             <div>
-                Please wait, while we are generating your new workspace...
+                <h1>Datenschutzerklärung</h1>
+                <div>Mit dem Klick auf nachfolgenden Link erklären Sie sich damit einverstanden, dass ihre hochgeladenen
+                    Fotos und deren Meta-Daten verarbeitet und in einer Datenbank abgespeichert werden. Dies gilt auch
+                    für weitere Eingaben die Sie zu ihren Fotos tätigen. Bitte beachten Sie ferner, dass ihre Daten
+                    öffentlich zugänglich sind und nicht speziell geschützt sind. Es besteht die Möglichkeit, dass ihre
+                    Daten von Drittanbietern geparst und/oder auf Datenbanken im Ausland abgespeichert werden. Der
+                    Betreiber dieser Webseite übernimmt keine Haftung hierzu.
+                </div>
+                <div>
+                    Wenn Sie damit nicht einverstanden sind, können Sie diese Webseite leider nicht verwenden.
+                </div>
+                <div>
+                    <button onClick={this.createAndForwardToNewWorkspace}>
+                        Ja, ich bin damit einverstanden, dass meine Daten verarbeitet, gespeichert und öffentlich
+                        zugänglich sind.
+                    </button>
+                </div>
             </div>
         );
     }
