@@ -3,18 +3,18 @@
     background-color: rgba(255, 255, 255, 0.91);
 }
 
-ul {
+.timeline-container ul {
     padding-left: 10px;
 }
 
-ul li {
+.timeline-container ul li {
     list-style-type: none;
     position: relative;
     padding: 20px 30px;
     border-left: 1px solid black;
 }
 
-ul li:after {
+.timeline-container ul li:after {
     content: '';
     position: absolute;
     left: 0;
