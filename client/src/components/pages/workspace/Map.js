@@ -1,5 +1,4 @@
 import React from 'react'
-import {Helmet} from 'react-helmet';
 import L from 'leaflet';
 import './Map.css';
 
@@ -8,6 +7,25 @@ const accessToken = 'pk.eyJ1IjoibWxlaW1lciIsImEiOiJjamkxY2t1M3owamlkM3BwaWhndGVp
 export class Map extends React.Component {
 
     componentDidMount() {
+
+        const workspace = {
+            "_id": "5b17a6acf6cbad6be4a92b16",
+            "name": "Test Trip",
+            "key": "123456abcuuid",
+            "images": [{
+                "geo": {
+                    "geometry": {"coordinates": [47.27, 8.50], "coordType": "Point"},
+                    "properties": {"name": "Bora Bora"},
+                    "geoType": "Feature"
+                },
+                "_id": "5b17a6acf6cbad6be4a92b17",
+                "key": "424242imgeuuid",
+                "dateIso": "2007-12-24T18:21Z",
+                "dateTicks": "1198520460"
+            }],
+            "__v": 0
+        };
+
         // OSM Street
         const osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
@@ -33,12 +51,15 @@ export class Map extends React.Component {
             accessToken: accessToken
         });
 
-        const leafletMap = L.map('map')
+        const imageLayerGroup = new L.LayerGroup();
+
+        const map = L.map('map')
             .setView([47.29040794, 8.52401733], 12) // center roughly on Zurich ;)
             .addLayer(mbSatelliteLayer)
             .addLayer(osmLayer)
             .addLayer(mbOutdoorsLayer)
-            .addLayer(osmOutdoorsLayer);
+            .addLayer(osmOutdoorsLayer)
+            .addLayer(imageLayerGroup);
 
         // leaflet control to choose base layer and toggle markers
         L.control
@@ -47,22 +68,21 @@ export class Map extends React.Component {
                 'MapBox Satellite': mbSatelliteLayer,
                 'MapBox Outdoors': mbOutdoorsLayer,
                 'Open Street Map Outdoors': osmOutdoorsLayer
+            }, {
+                'Images': imageLayerGroup
             })
-            .addTo(leafletMap);
+            .addTo(map);
+
+        for (const image of workspace.images) {
+            const marker = L.marker(image.geo.geometry.coordinates);
+            marker.bindPopup('Image');
+            marker.addTo(imageLayerGroup);
+        }
     }
 
     render() {
         return (
             <div id="map-container">
-                <Helmet>
-                    <meta charSet="utf-8" />
-                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-                          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-                          crossOrigin=""/>
-                    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-                            integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-                            crossorigin=""></script>
-                </Helmet>
                 <div id="map"/>
             </div>
         );
