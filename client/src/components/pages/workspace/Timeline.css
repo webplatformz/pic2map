@@ -1,6 +1,11 @@
 .timeline-container {
     padding: 0 20px;
     background-color: rgba(255, 255, 255, 0.91);
+    flex: 1 1 0;
+}
+
+.timeline-container button {
+    margin-top: 10px;
 }
 
 .timeline-container ul {

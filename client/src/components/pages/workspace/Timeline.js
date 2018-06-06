@@ -22,15 +22,35 @@ class ImageElement extends React.Component {
 }
 
 class Timeline extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.deleteWorkspace = this.deleteWorkspace.bind(this);
+    }
+
+    deleteWorkspace() {
+        const id = this.props.trip.key;
+        fetch(`/api/workspace/${id}`, {method: 'DELETE'})
+            .then(() => {
+                this.props.history.push('/');
+            })
+            .catch(() => {
+                console.error("Could not delete workspace");
+            });
+    }
     
     renderImageElement(image) {
         return <ImageElement image={image}/>
     }
 
     render() {
-        const imageElements = this.props.images.map(image => <li key={image.key}>{this.renderImageElement(image)}</li>);
+        const imageElements = this.props.trip.images.map(image => <li
+            key={image.key}>{this.renderImageElement(image)}</li>);
         return (
             <div className="timeline-container">
+                <button onClick={this.deleteWorkspace}>
+                    Workspace löschen
+                </button>
                 <FileUpload/>
                 <h1>Timeline</h1>
                 <ul>
@@ -43,6 +63,6 @@ class Timeline extends React.Component {
 
 export default connect(
     state => ({
-        images: state.trip.images
+        trip: state.trip
     })
 )(Timeline);

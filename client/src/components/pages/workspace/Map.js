@@ -10,11 +10,26 @@ import 'leaflet.markercluster';
 import './Map.css';
 import {connect} from "react-redux";
 
+const imageLayerGroup = new L.markerClusterGroup();
 const accessToken = 'pk.eyJ1IjoibWxlaW1lciIsImEiOiJjamkxY2t1M3owamlkM3BwaWhndGVpM2pzIn0.zUGWyylw3BKCaBRQUN2LXQ';
+let map;
 
 class Map extends React.Component {
 
     componentDidMount() {
+        this.initialiseMap();
+    }
+
+    render() {
+        this.recomputeMarkers();
+        return (
+            <div id="map-container">
+                <div id="map"/>
+            </div>
+        );
+    }
+
+    initialiseMap() {
         // OSM Street
         const osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
@@ -40,9 +55,7 @@ class Map extends React.Component {
             accessToken: accessToken
         });
 
-        const imageLayerGroup = new L.markerClusterGroup();
-
-        const map = L.map('map')
+        map = L.map('map')
             .setView([47.29040794, 8.52401733], 12) // center roughly on Zurich ;)
             .addLayer(mbSatelliteLayer)
             .addLayer(osmLayer)
@@ -61,10 +74,20 @@ class Map extends React.Component {
                 'Images': imageLayerGroup
             })
             .addTo(map);
+    }
 
-        const workspaceId = this.props.workspace.key;
+    recomputeMarkers() {
+        imageLayerGroup.clearLayers();
+        this.addMarkers(this.props.workspace.key);
+
+        if (map) {
+            map.fitBounds(this.computeMapBoundaries());
+        }
+    }
+
+    addMarkers(workspaceId) {
         for (const image of this.props.workspace.images) {
-            if (image.location && image.location.lat && image.location.lng) {
+            if (this.imageWithLocationData(image)) {
                 const icon = L.icon({
                     iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
                     /*iconUrl: `/api/workspace/${workspaceId}/picture/${image.key}`,*/
@@ -87,13 +110,37 @@ class Map extends React.Component {
         }
     }
 
-    render() {
-        return (
-            <div id="map-container">
-                <div id="map"/>
-            </div>
-        );
+    computeMapBoundaries() {
+        let maxLat = -90; // top left corner latitude
+        let minLong = 180; // top left corner longitude
+        let minLat = 90; // bottom right corner latitude
+        let maxLong = -180; // bottom right corner longitude
+        for (const image of this.props.workspace.images) {
+            if (this.imageWithLocationData(image)) {
+                if (image.location.lat > maxLat) {
+                    maxLat = image.location.lat;
+                }
+                if(image.location.lat < minLat) {
+                    minLat = image.location.lat;
+                }
+                if (image.location.lng < minLong) {
+                    minLong = image.location.lng;
+                }
+                if (image.location.lng > maxLong) {
+                    maxLong = image.location.lng;
+                }
+            }
+        }
+        return [
+            [maxLat, minLong],
+            [minLat, maxLong]
+        ];
     }
+
+    imageWithLocationData(image) {
+        return image.location && image.location.lat && image.location.lng;
+    }
+
 }
 
 function mapsStateToProps(state) {
