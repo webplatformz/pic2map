@@ -24,7 +24,7 @@ export default class WorkspaceCreator extends React.Component {
     }
 
     forwardToWorkspace(workspaceId) {
-        this.props.history.push(`/map/${workspaceId}`)
+        this.props.history.push(`/workspace/${workspaceId}`)
     }
 
     render() {

@@ -1,13 +1,13 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 import WorkspaceCreator from '../pages/workspacecreator/WorkspaceCreator'
-import Map from '../pages/map/Map'
+import Workspace from '../pages/workspace/Workspace'
 
 const Main = () => (
     <main>
         <Switch>
             <Route exact path='/' component={WorkspaceCreator}/>
-            <Route path='/map/:id' component={Map}/>
+            <Route path='/workspace/:id' component={Workspace}/>
         </Switch>
     </main>
 );

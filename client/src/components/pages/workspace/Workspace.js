@@ -1,13 +1,9 @@
 import React from 'react'
-import ReactMapboxGl from 'react-mapbox-gl';
+import {Map} from './Map';
 import {Timeline} from './Timeline';
 import FileUpload from './FileUpload';
 
-const MapBox = ReactMapboxGl({
-    accessToken: 'pk.eyJ1IjoibWxlaW1lciIsImEiOiJjamkxY2t1M3owamlkM3BwaWhndGVpM2pzIn0.zUGWyylw3BKCaBRQUN2LXQ'
-});
-
-export default class Map extends React.Component {
+export default class Workspace extends React.Component {
 
     constructor(props) {
         super(props);
@@ -18,7 +14,7 @@ export default class Map extends React.Component {
         const id = this.props.match.params.id;
         fetch(`/api/workspace/${id}`, {method: 'DELETE'})
             .then(() => {
-                alert('Workspace deleted');
+                this.props.history.push('/');
             })
             .catch(() => {
                 console.error("Could not delete workspace");
@@ -28,11 +24,10 @@ export default class Map extends React.Component {
     render() {
         return (
             <div>
-                <MapBox // eslint-disable-next-line
-                    style="mapbox://styles/mapbox/streets-v8"
-                    containerStyle={{width: '100vw', height: '100vh'}}
-                />
-                <Timeline/>
+                <div id="workspace-container">
+                    <Map/>
+                    <Timeline/>
+                </div>
                 <div>
                     <h2> File upload </h2>
                     <FileUpload/>
