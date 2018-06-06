@@ -1,31 +1,20 @@
 import React from 'react'
+
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster';
+
 import './Map.css';
+import {connect} from "react-redux";
 
 const accessToken = 'pk.eyJ1IjoibWxlaW1lciIsImEiOiJjamkxY2t1M3owamlkM3BwaWhndGVpM2pzIn0.zUGWyylw3BKCaBRQUN2LXQ';
 
-export class Map extends React.Component {
+class Map extends React.Component {
 
     componentDidMount() {
-
-        const workspace = {
-            "_id": "5b17a6acf6cbad6be4a92b16",
-            "name": "Test Trip",
-            "key": "123456abcuuid",
-            "images": [{
-                "geo": {
-                    "geometry": {"coordinates": [47.27, 8.50], "coordType": "Point"},
-                    "properties": {"name": "Bora Bora"},
-                    "geoType": "Feature"
-                },
-                "_id": "5b17a6acf6cbad6be4a92b17",
-                "key": "424242imgeuuid",
-                "dateIso": "2007-12-24T18:21Z",
-                "dateTicks": "1198520460"
-            }],
-            "__v": 0
-        };
-
         // OSM Street
         const osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
@@ -73,11 +62,28 @@ export class Map extends React.Component {
             })
             .addTo(map);
 
-        for (const image of workspace.images) {
-            const marker = L.marker(image.geo.geometry.coordinates);
-            marker.bindPopup('Image');
-            marker.addTo(imageLayerGroup);
+        const markers = L.markerClusterGroup();
+        for (const image of this.props.workspace.images) {
+                 const icon = L.icon({
+                     iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                     iconSize:     [38, 95], // size of the icon
+                     iconAnchor:   [22, 94],
+                     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                 });
+
+            //const marker = L.marker(image.geo.geometry.coordinates);
+            const marker = L.marker([image.location.lat, image.location.lng]);
+                 marker.setIcon(icon);
+                 marker.bindPopup('<img src="https://leafletjs.com/examples/custom-icons/leaf-green.png"/>');
+                 marker.on('mouseover', function (e) {
+                     this.openPopup();
+                 });
+                 marker.on('mouseout', function (e) {
+                     this.closePopup();
+                 });
+                 marker.addTo(markers);
         }
+        map.addLayer(markers)
     }
 
     render() {
@@ -88,4 +94,12 @@ export class Map extends React.Component {
         );
     }
 }
+
+function mapsStateToProps(state) {
+    return {
+        workspace: state.trip
+    };
+}
+
+export default connect(mapsStateToProps)(Map);
 

@@ -1,4 +1,6 @@
 import React from 'react'
+import {createWorkspace} from "../../../middleware/api";
+import {workspaceCreated} from "../../../actions/tripActions";
 
 export default class WorkspaceCreator extends React.Component {
 
@@ -8,7 +10,7 @@ export default class WorkspaceCreator extends React.Component {
     }
 
     createAndForwardToNewWorkspace() {
-        fetch('/api/workspace', {method: 'POST'})
+        createWorkspace()
             .then((res) => {
                 res.json()
                     .then((res) => {
