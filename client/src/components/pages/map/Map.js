@@ -35,7 +35,7 @@ export default class Map extends React.Component {
                 <Timeline/>
                 <div>
                     <h2> File upload </h2>
-                    <FileUpload/>
+                    <FileUpload workspaceId={this.props.match.params.id}/>
                 </div>
                 <button onClick={this.deleteWorkspace}>
                     Workspace löschen

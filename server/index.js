@@ -1,8 +1,12 @@
 const express = require('express');
 const path = require('path');
 const guid = require('./util/guid');
+const multer  = require('multer');
 
 const app = express();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client')));
@@ -26,6 +30,28 @@ app.post('/api/workspace', (req, res) => {
 });
 
 app.get('/api/workspace/:id', function (req, res) {
+    res.send(req.params)
+});
+
+app.post('/api/workspace/:id/picture', upload.array('pictures'), function (req, res) {
+    console.log('Workspace ID:', req.params.id);
+
+    req.files.forEach((file, index) => {
+        console.log('Index:', index, 'filename:', file.originalname, 'mimetype', file.mimetype, 'buffer:', file.buffer);
+    });
+
+    res.sendStatus(201)
+});
+
+app.get('/api/workspace/:id/picture/:pictureId', function (req, res) {
+    res.send(req.params)
+});
+
+app.get('/api/workspace/:id/picture/:pictureId/thumb', function (req, res) {
+    res.send(req.params)
+});
+
+app.delete('/api/workspace/:id/picture/:pictureId', function (req, res) {
     res.send(req.params)
 });
 
