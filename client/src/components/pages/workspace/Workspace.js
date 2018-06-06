@@ -15,7 +15,7 @@ class Workspace extends React.Component {
     }
 
     componentDidMount() {
-        getTrip('123456abcuuid')
+        getTrip(this.props.match.params.id)
             .then(response => {
                 response.json().then(value => {
                     this.props.dispatch(loadTripSuccessful(value));
@@ -54,5 +54,11 @@ class Workspace extends React.Component {
     }
 }
 
-export default connect()(Workspace);
+function mapsStateToProps(state, ownProps) {
+    return {
+        key: state.trip.key
+    };
+}
+
+export default connect(mapsStateToProps)(Workspace);
 
