@@ -6,8 +6,6 @@ cache:
   - node_modules
   - client/node_modules
   - server/node_modules
-install:
-- npm run install:all
 script:
 - npm run test:ci
 deploy:
