@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 import Button from '@material-ui/core/Button';
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import {API_ROOT, deleteImage, getTrip} from '../../../middleware/api';
+import {connect} from "react-redux";
+import {loadTripSuccessful} from "../../../actions/tripActions";
 
 const ImageContainer = styled.div`
     width: 100%;
@@ -52,14 +55,29 @@ const EditButton = styled(DeleteButton)`
 `;
 
 
-export default class TimelineElement extends React.Component {
+class TimelineElement extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onDeleteImageClick = this.onDeleteImageClick.bind(this);
+    }
+
+    onDeleteImageClick() {
+        deleteImage(this.props.tripId, this.props.image.imageId)
+            .then(() => {
+                getTrip(this.props.tripId)
+                    .then(response => response.json().then(this.props.loadTripSuccessful))
+                    .catch(error => console.error(error))
+            })
+            .catch(() => console.error("Could not delete image"));
+    }
+
     render() {
         const editMode = this.props.editMode;
         const date = moment(this.props.image.date);
 
         const editElements = editMode ? (
             <div>
-                <DeleteButton variant="fab"><DeleteIcon/></DeleteButton>
+                <DeleteButton variant="fab" onClick={this.onDeleteImageClick}><DeleteIcon/></DeleteButton>
                 <EditButton variant="fab"><EditIcon/></EditButton>
             </div>
         ) : null;
@@ -67,7 +85,7 @@ export default class TimelineElement extends React.Component {
         return (
             <ImageContainer>
                 <img alt="Placeholder"
-                     src="https://www.amv-mz.de/wp-content/themes/oria-child/images/placeholder.png"/>
+                     src={`${API_ROOT}/trips/${this.props.tripId}/images/${this.props.image.imageId}`}/>
                 <Content>
                     <h3>{date.format('ddd, DD.MM.YYYY')}</h3>
                     <p>{this.props.image.title}</p>
@@ -79,5 +97,13 @@ export default class TimelineElement extends React.Component {
 }
 
 TimelineElement.propTypes = {
-    editMode: PropTypes.bool
+    editMode: PropTypes.bool,
+    image: PropTypes.object
 };
+
+export default connect(
+    state => ({
+        tripId: state.trip.tripId
+    }),
+    {loadTripSuccessful}
+)(TimelineElement);

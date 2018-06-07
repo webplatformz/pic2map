@@ -78,6 +78,7 @@ class Timeline extends React.Component {
     renderImageElement(image) {
         return <TimelineElement
             editMode={this.state.editMode}
+            tripId={this.props.trip.tripId}
             image={image}/>
     }
 
