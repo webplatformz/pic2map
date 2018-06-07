@@ -50,7 +50,20 @@ app.post('/api/trips/:tripId/images', upload.array('images'), async (req, res) =
 });
 
 app.get('/api/trips/:tripId/images/:imageId', function (req, res) {
-    res.send(req.params)
+    const imageId = req.params.imageId;
+    mongoClient.getImageById(imageId)
+        .then(item => {
+            if (item) {
+                console.log("image found. ### TBD ### Processing Thumb");
+                res.sendStatus(200);
+            }
+            else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(() => {
+            res.sendStatus(500);
+        });
 });
 
 app.get('/api/trips/:tripId/images/:imageId/thumb', function (req, res) {
