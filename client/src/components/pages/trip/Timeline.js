@@ -4,6 +4,7 @@ import FileUpload from "./FileUpload";
 import TimelineElement from "./TimelineElement";
 import styled from 'styled-components';
 import {deleteTrip} from "../../../middleware/api";
+import { withRouter } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 
 
@@ -64,14 +65,16 @@ class Timeline extends React.Component {
 
     onDeleteClick() {
         deleteTrip(this.props.trip.tripId)
-            .then(() => this.props.history.push('/'))
+            .then(() => {
+                this.props.history.push('');
+            })
             .catch(() => console.error("Could not delete trip"));
     }
 
     onShareClick() {
         // TODO share call
     }
-    
+
     renderImageElement(image) {
         return <TimelineElement
             editMode={this.state.editMode}
@@ -105,8 +108,8 @@ class Timeline extends React.Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         trip: state.trip
     })
-)(Timeline);
+)(Timeline));
