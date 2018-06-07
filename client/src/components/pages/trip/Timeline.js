@@ -3,6 +3,9 @@ import {connect} from "react-redux";
 import FileUpload from "./FileUpload";
 import TimelineElement from "./TimelineElement";
 import styled from 'styled-components';
+import {deleteTrip} from "../../../middleware/api";
+import Button from '@material-ui/core/Button';
+
 
 const TimelineContainer = styled.div`
     padding: 0 20px;
@@ -12,10 +15,18 @@ const TimelineContainer = styled.div`
     overflow: auto;
 `;
 
-const DeleteButton = styled.button`
-    margin-top: 10px;
+const DeleteButton = styled(Button)`
+    && {
+      margin-top: 10px;
+    }
 `;
 
+const ShareButton = styled(Button)`
+    && {
+        margin-top: 10px;
+        float: right;
+    }
+`;
 const TimelineElements = styled.ul`
     padding-left: 10px;
     
@@ -47,18 +58,18 @@ class Timeline extends React.Component {
     constructor(props) {
         super(props);
         this.state = {editMode: true};
-        this.deleteTrip = this.deleteTrip.bind(this);
+        this.onDeleteClick = this.onDeleteClick.bind(this);
+        this.onShareClick = this.onShareClick.bind(this);
     }
 
-    deleteTrip() {
-        const tripId = this.props.trip.tripId;
-        fetch(`/api/trips/${tripId}`, {method: 'DELETE'})
-            .then(() => {
-                this.props.history.push('/');
-            })
-            .catch(() => {
-                console.error("Could not delete trip");
-            });
+    onDeleteClick() {
+        deleteTrip(this.props.trip.tripId)
+            .then(() => this.props.history.push('/'))
+            .catch(() => console.error("Could not delete trip"));
+    }
+
+    onShareClick() {
+        // TODO share call
     }
     
     renderImageElement(image) {
@@ -74,7 +85,8 @@ class Timeline extends React.Component {
 
         const editElements = editMode ? (
             <div>
-                <DeleteButton onClick={this.deleteTrip}>Trip löschen</DeleteButton>
+                <DeleteButton variant="outlined" onClick={this.onDeleteClick}>Trip löschen</DeleteButton>
+                <ShareButton variant="outlined" onClick={this.onDeleteClick}>Share</ShareButton>
                 <FileUpload/>
             </div>
         ) : null;
