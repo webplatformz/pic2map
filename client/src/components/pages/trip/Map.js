@@ -6,9 +6,19 @@ import L from 'leaflet';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster';
-
-import './Map.css';
 import {connect} from "react-redux";
+import styled from 'styled-components';
+
+const MapContainer = styled.div`
+    flex-basis: 800px;
+    flex-grow: 2;
+    flex: 3 1 0;
+`;
+
+const Mapbox = styled.div`
+    width: 100%;
+    height: 100%;
+`;
 
 const imageLayerGroup = new L.markerClusterGroup();
 const accessToken = 'pk.eyJ1IjoibWxlaW1lciIsImEiOiJjamkxY2t1M3owamlkM3BwaWhndGVpM2pzIn0.zUGWyylw3BKCaBRQUN2LXQ';
@@ -23,9 +33,9 @@ class Map extends React.Component {
     render() {
         this.recomputeMarkers();
         return (
-            <div id="map-container">
-                <div id="map"/>
-            </div>
+            <MapContainer id="map-container">
+                <Mapbox id="map"/>
+            </MapContainer>
         );
     }
 

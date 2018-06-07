@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Dropzone from 'react-dropzone';
 import styled from 'styled-components';
-
 import {getTrip} from '../../../middleware/api';
 import {loadTripSuccessful} from '../../../actions/tripActions';
+import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
 
 const UploadBox = styled.div`
   margin-top: 20px;
@@ -27,11 +27,19 @@ const UploadBox = styled.div`
   }
   `;
 
+const LoadingBox = styled.div `
+  margin-top: 20px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+`;
+
 
 class FileUpload extends Component {
     constructor() {
         super();
-        this.state = {files: []};
+        this.state = {files: [], isUploading: false};
     }
 
     onDrop(files) {
@@ -40,6 +48,7 @@ class FileUpload extends Component {
     }
 
     uploadImages(images) {
+        this.setState({isUploading: true});
         const formData = new FormData();
         images.forEach(image => formData.append('images', image, image.name));
 
@@ -47,18 +56,28 @@ class FileUpload extends Component {
             method: 'POST',
             body: formData
         }).then(response => {
-                if (response.ok) {
-                    // Reload data
-                    getTrip(this.props.tripId)
-                        .then(response => response.json().then(this.props.loadTripSuccessful))
-                        .catch(error => console.error(error));
-                } else {
-                    console.warn('Could not upload files');
-                }
-            });
+            if (response.ok) {
+                // Reload data
+                getTrip(this.props.tripId)
+                    .then(response => response.json().then(this.props.loadTripSuccessful))
+                    .catch(error => console.error(error))
+                    .finally(() => this.setState({isUploading: false}));
+            } else {
+                console.warn('Could not upload files');
+                this.setState({isUploading: false});
+            }
+        });
     }
 
     render() {
+        if (this.state.isUploading) {
+            return (
+                <LoadingBox>
+                    <CircularProgress size={50}/>
+                </LoadingBox>
+            );
+        }
+
         return (
             <section>
                 <UploadBox>
