@@ -16,8 +16,23 @@ db.once('open', function () {
     // we're connected!
 });
 
+function createTrip() {
+    const trip = new Trip({
+        name: 'New trip',
+        tripId: guid.generate(),
+        images: []
+    });
+    return Trip.create(trip);
+}
+
 function getTripById(tripId) {
-    return Trip.findOne({tripId: tripId}).catch(console.warn);
+    return Trip.findOne({tripId: tripId})
+        .then((res) => {
+            if (res) {
+                return res;
+            }
+            return Promise.reject(new Error(`Trip ${tripId} not found`));
+        });
 }
 
 function addImagesToTrip(tripId, images) {
@@ -39,24 +54,23 @@ function addImagesToTrip(tripId, images) {
     });
 
     return getTripById(tripId).then(trip => {
-        const tripToUpdate = trip || new Trip({
-            name: 'New trip',
-            tripId: tripId,
-            images: []
-        });
-
         return Promise.all(futureImageData)
             .then(imageData => {
-                tripToUpdate.images = tripToUpdate.images.concat(imageData);
-
-                return Promise.fromCallback(cb => Trip.update({tripId: tripToUpdate.tripId}, tripToUpdate, {upsert: true}, cb));
+                trip.images = trip.images.concat(imageData);
+                return Promise.fromCallback(cb => Trip.update({tripId: trip.tripId}, trip, {upsert: true}, cb));
             });
     });
 }
 
+function deleteTrip(tripId) {
+    return Trip.findOne({tripId: tripId}).remove().exec();
+}
+
 module.exports = {
+    createTrip,
     getTripById,
     addImagesToTrip,
+    deleteTrip,
     deleteTestTrip: function () {
     },
     insertMockData: function () {

@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const guid = require('./util/guid');
 const mongoClient = require('./persistance/mongoClient');
 const multer = require('multer');
 const imageTransformer = require('./image_processor/imageTransformer');
@@ -24,8 +23,14 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.post('/api/trips', (req, res) => {
-    // TODO store it in DB.
-    res.json({tripId: guid.generate()});
+    mongoClient.createTrip()
+        .then((trip) => {
+            res.json(trip);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.sendStatus(500);
+        });
 });
 
 app.get('/api/trips/:tripId', function (req, res) {
@@ -33,13 +38,10 @@ app.get('/api/trips/:tripId', function (req, res) {
     mongoClient.getTripById(tripId)
         .then(item => {
             console.log(item);
-
-            res.send(item || {
-                tripId:tripId,
-                images: []
-            });
+            res.send(item);
         })
-        .catch(() => {
+        .catch((error) => {
+            console.warn(error);
             res.sendStatus(400);
         });
     //mongoClient.insertMockData();
@@ -47,7 +49,7 @@ app.get('/api/trips/:tripId', function (req, res) {
 
 app.post('/api/trips/:tripId/images', upload.array('images'), async (req, res) => {
     await mongoClient.addImagesToTrip(req.params.tripId, req.files);
-    res.sendStatus(200);
+    res.sendStatus(204);
 });
 
 app.get('/api/trips/:tripId/images/:imageId', function (req, res) {
@@ -95,8 +97,13 @@ app.delete('/api/trips/:tripId/images/:imageId', function (req, res) {
 });
 
 app.delete('/api/trips/:tripId', (req, res) => {
-    // TODO Delete trip and images in DB.
-    res.sendStatus(204);
+    mongoClient.deleteTrip(req.params.tripId)
+        .then(() => {
+            res.sendStatus(204);
+        })
+        .catch(() => {
+            res.sendStatus(400);
+        });
 });
 
 app.delete('/api/clear-all-data', (req, res) => {
