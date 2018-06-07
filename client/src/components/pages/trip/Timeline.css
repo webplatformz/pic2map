@@ -2,6 +2,8 @@
     padding: 0 20px;
     background-color: rgba(255, 255, 255, 0.91);
     flex: 1 1 0;
+    height: 100%;
+    overflow: auto;
 }
 
 .timeline-container button {
