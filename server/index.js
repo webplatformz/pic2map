@@ -3,6 +3,7 @@ const path = require('path');
 const guid = require('./util/guid');
 const mongoClient = require('./persistance/mongoClient');
 const multer = require('multer');
+const imageTransformer = require('./image_processor/imageTransformer');
 
 const app = express();
 
@@ -54,8 +55,7 @@ app.get('/api/trips/:tripId/images/:imageId', function (req, res) {
     mongoClient.getImageById(imageId)
         .then(item => {
             if (item) {
-                console.log("image found. ### TBD ### Processing Thumb");
-                res.sendStatus(200);
+                res.send(item.buffer);
             }
             else {
                 res.sendStatus(404);
@@ -67,6 +67,26 @@ app.get('/api/trips/:tripId/images/:imageId', function (req, res) {
 });
 
 app.get('/api/trips/:tripId/images/:imageId/thumb', function (req, res) {
+    const imageId = req.params.imageId;
+    mongoClient.getImageById(imageId)
+        .then(item => {
+            if (item) {
+                console.log("image found. ### TBD ### Processing Thumb");
+                imageTransformer.generateThumb(item.buffer)
+                    .then(thumb => {
+                        res.send(thumb);
+                    })
+                    .catch(() => {
+                        res.sendStatus(500);
+                    });
+            }
+            else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(() => {
+            res.sendStatus(500);
+        });
     res.send(req.params)
 });
 
