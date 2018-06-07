@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WorkspaceCreator from './WorkspaceCreator';
+import TripCreator from './TripCreator';
 
-describe('WorkspaceCreator', () => {
+describe('TripCreator', () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<WorkspaceCreator/>, div);
+        ReactDOM.render(<TripCreator/>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 });

@@ -16,9 +16,10 @@ db.once('open', function () {
 
 const TripSchema = mongoose.Schema({
     name: String,
-    key: String,
+    tripId: String,
+    tripViewId: String,
     images: [{
-        key: String,
+        imageId: String,
         location: {
             lat: Number,
             lng: Number
@@ -33,11 +34,11 @@ const Trip = db.model('Trip', TripSchema);
 
 function getTripById(tripId) {
     const Trip = db.model('Trip', TripSchema);
-    return Trip.findOne({key: tripId}).catch(console.warn);
+    return Trip.findOne({tripId: tripId}).catch(console.warn);
 }
 
-function addPicturesToTrip(tripId, pictures) {
-    const futurePictureData = pictures.map(async file => {
+function addImagesToTrip(tripId, images) {
+    const futureImageData = images.map(async file => {
         let metadata = {};
         try {
             metadata = await extract(file.buffer);
@@ -46,7 +47,7 @@ function addPicturesToTrip(tripId, pictures) {
         }
 
         return {
-            key: guid.generate(),
+            imageId: guid.generate(),
             location: metadata.location,
             filename: file.originalname,
             timestamp: metadata.timestamp,
@@ -57,15 +58,15 @@ function addPicturesToTrip(tripId, pictures) {
     return getTripById(tripId).then(trip => {
         const tripToUpdate = trip || new Trip({
             name: 'New trip',
-            key: tripId,
+            tripId: tripId,
             images: []
         });
 
-        return Promise.all(futurePictureData)
-            .then(pictureData => {
-                tripToUpdate.images = tripToUpdate.images.concat(pictureData);
+        return Promise.all(futureImageData)
+            .then(imageData => {
+                tripToUpdate.images = tripToUpdate.images.concat(imageData);
 
-                return Promise.fromCallback(cb => Trip.update({key: tripToUpdate.key}, tripToUpdate, {upsert: true}, cb));
+                return Promise.fromCallback(cb => Trip.update({tripId: tripToUpdate.tripId}, tripToUpdate, {upsert: true}, cb));
             });
     });
 }
@@ -73,13 +74,14 @@ function addPicturesToTrip(tripId, pictures) {
 
 module.exports = {
     getTripById,
-    addPicturesToTrip,
+    addImagesToTrip,
     deleteTestTrip: function () {
     },
     insertMockData: function () {
         const trip = new Trip({
             name: 'Test Trip',
-            key: '123456abcuuid',
+            tripId: '1234',
+            tripViewId: '5678',
             images: [
                 {
                     location: {
@@ -88,7 +90,7 @@ module.exports = {
                     },
                     filename: 'Elephant.jpg',
                     timestamp: 1198520460,
-                    key: '424242imgeuuid'
+                    imageId: '424242imgeuuid'
                 }
             ]
         });

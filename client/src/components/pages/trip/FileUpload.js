@@ -36,26 +36,26 @@ class FileUpload extends Component {
 
     onDrop(files) {
         this.setState({files: this.state.files.concat(files)});
-        this.uploadPictures(files);
+        this.uploadImages(files);
     }
 
-    uploadPictures(pictures) {
+    uploadImages(images) {
         const formData = new FormData();
-        pictures.forEach(picture => formData.append('pictures', picture, picture.name));
+        images.forEach(image => formData.append('images', image, image.name));
 
-        fetch(`/api/workspace/${this.props.tripId}/picture`, {
+        fetch(`/api/trips/${this.props.tripId}/images`, {
             method: 'POST',
             body: formData
         }).then(response => {
-            if (response.ok) {
-                // Reload data
-                getTrip(this.props.tripId)
-                    .then(response => response.json().then(this.props.loadTripSuccessful))
-                    .catch(error => console.error(error));
-            } else {
-                console.warn('Could not upload files');
-            }
-        });
+                if (response.ok) {
+                    // Reload data
+                    getTrip(this.props.tripId)
+                        .then(response => response.json().then(this.props.loadTripSuccessful))
+                        .catch(error => console.error(error));
+                } else {
+                    console.warn('Could not upload files');
+                }
+            });
     }
 
     render() {
@@ -78,7 +78,7 @@ FileUpload.propTypes = {
 
 export default connect(
     state => ({
-        tripId: state.trip.key
+        tripId: state.trip.tripId
     }),
     {loadTripSuccessful}
 )(FileUpload);

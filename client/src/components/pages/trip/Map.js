@@ -78,19 +78,19 @@ class Map extends React.Component {
 
     recomputeMarkers() {
         imageLayerGroup.clearLayers();
-        this.addMarkers(this.props.workspace.key);
+        this.addMarkers(this.props.trip.tripId);
 
         if (map) {
             map.fitBounds(this.computeMapBoundaries());
         }
     }
 
-    addMarkers(workspaceId) {
-        for (const image of this.props.workspace.images) {
+    addMarkers(tripId) {
+        for (const image of this.props.trip.images) {
             if (this.imageWithLocationData(image)) {
                 const icon = L.icon({
                     iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-                    /*iconUrl: `/api/workspace/${workspaceId}/picture/${image.key}`,*/
+                    /*iconUrl: `/api/trips/${tripId}/images/${image.imageId}`,*/
                     iconSize: [38, 95], // size of the icon
                     iconAnchor: [22, 94],
                     popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
@@ -98,7 +98,7 @@ class Map extends React.Component {
 
                 const marker = L.marker([image.location.lat, image.location.lng]);
                 marker.setIcon(icon);
-                marker.bindPopup(`<img src="/api/workspace/${workspaceId}/picture/${image.key}"/>`);
+                marker.bindPopup(`<img src="/api/trips/${tripId}/images/${image.imageId}"/>`);
                 marker.on('mouseover', function (e) {
                     this.openPopup();
                 });
@@ -115,7 +115,7 @@ class Map extends React.Component {
         let minLong = 180; // top left corner longitude
         let minLat = 90; // bottom right corner latitude
         let maxLong = -180; // bottom right corner longitude
-        for (const image of this.props.workspace.images) {
+        for (const image of this.props.trip.images) {
             if (this.imageWithLocationData(image)) {
                 if (image.location.lat > maxLat) {
                     maxLat = image.location.lat;
@@ -145,7 +145,7 @@ class Map extends React.Component {
 
 function mapsStateToProps(state) {
     return {
-        workspace: state.trip
+        trip: state.trip
     };
 }
 

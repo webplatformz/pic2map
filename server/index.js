@@ -22,19 +22,19 @@ app.get('/api/hello', (req, res) => {
     res.json(helloWorld);
 });
 
-app.post('/api/workspace', (req, res) => {
+app.post('/api/trips', (req, res) => {
     // TODO store it in DB.
-    res.json({id: guid.generate()});
+    res.json({tripId: guid.generate()});
 });
 
-app.get('/api/workspace/:id', function (req, res) {
-    const tripKey = req.params.id;
-    mongoClient.getTripById(tripKey)
+app.get('/api/trips/:tripId', function (req, res) {
+    const tripId = req.params.tripId;
+    mongoClient.getTripById(tripId)
         .then(item => {
             console.log(item);
 
             res.send(item || {
-                key:tripKey,
+                tripId:tripId,
                 images: []
             });
         })
@@ -44,25 +44,25 @@ app.get('/api/workspace/:id', function (req, res) {
     //mongoClient.insertMockData();
 });
 
-app.post('/api/workspace/:id/picture', upload.array('pictures'), async (req, res) => {
-    await mongoClient.addPicturesToTrip(req.params.id, req.files);
+app.post('/api/trips/:tripId/images', upload.array('images'), async (req, res) => {
+    await mongoClient.addImagesToTrip(req.params.tripId, req.files);
     res.sendStatus(200);
 });
 
-app.get('/api/workspace/:id/picture/:pictureId', function (req, res) {
+app.get('/api/trips/:tripId/images/:imageId', function (req, res) {
     res.send(req.params)
 });
 
-app.get('/api/workspace/:id/picture/:pictureId/thumb', function (req, res) {
+app.get('/api/trips/:tripId/images/:imageId/thumb', function (req, res) {
     res.send(req.params)
 });
 
-app.delete('/api/workspace/:id/picture/:pictureId', function (req, res) {
+app.delete('/api/trips/:tripId/images/:imageId', function (req, res) {
     res.send(req.params)
 });
 
-app.delete('/api/workspace/:id', (req, res) => {
-    // TODO Delete workspace and pictures in DB.
+app.delete('/api/trips/:tripId', (req, res) => {
+    // TODO Delete trip and images in DB.
     res.sendStatus(204);
 });
 

@@ -1,31 +1,31 @@
 import React from 'react'
-import {createWorkspace} from "../../../middleware/api";
+import {createTrip} from "../../../middleware/api";
 
-export default class WorkspaceCreator extends React.Component {
+export default class TripCreator extends React.Component {
 
     constructor(props) {
         super(props);
-        this.createAndForwardToNewWorkspace = this.createAndForwardToNewWorkspace.bind(this);
+        this.createAndForwardToNewTrip = this.createAndForwardToNewTrip.bind(this);
     }
 
-    createAndForwardToNewWorkspace() {
-        createWorkspace()
+    createAndForwardToNewTrip() {
+        createTrip()
             .then((res) => {
                 res.json()
                     .then((res) => {
-                        this.forwardToWorkspace(res.id)
+                        this.forwardToTrip(res.tripId)
                     })
                     .catch(() => {
                         console.error("Could not parse response");
                     })
             })
             .catch(() => {
-                console.error("Could not generate new workspace");
+                console.error("Could not generate new trip");
             });
     }
 
-    forwardToWorkspace(workspaceId) {
-        this.props.history.push(`/workspace/${workspaceId}`)
+    forwardToTrip(tripId) {
+        this.props.history.push(`/trips/${tripId}`)
     }
 
     render() {
@@ -43,7 +43,7 @@ export default class WorkspaceCreator extends React.Component {
                     Wenn Sie damit nicht einverstanden sind, können Sie diese Webseite leider nicht verwenden.
                 </div>
                 <div>
-                    <button onClick={this.createAndForwardToNewWorkspace}>
+                    <button onClick={this.createAndForwardToNewTrip}>
                         Ja, ich bin damit einverstanden, dass meine Daten verarbeitet, gespeichert und öffentlich
                         zugänglich sind.
                     </button>

@@ -25,17 +25,17 @@ class Timeline extends React.Component {
 
     constructor(props) {
         super(props);
-        this.deleteWorkspace = this.deleteWorkspace.bind(this);
+        this.deleteTrip = this.deleteTrip.bind(this);
     }
 
-    deleteWorkspace() {
-        const id = this.props.trip.key;
-        fetch(`/api/workspace/${id}`, {method: 'DELETE'})
+    deleteTrip() {
+        const tripId = this.props.trip.tripId;
+        fetch(`/api/trips/${tripId}`, {method: 'DELETE'})
             .then(() => {
                 this.props.history.push('/');
             })
             .catch(() => {
-                console.error("Could not delete workspace");
+                console.error("Could not delete trip");
             });
     }
     
@@ -45,11 +45,11 @@ class Timeline extends React.Component {
 
     render() {
         const imageElements = this.props.trip.images.map(image => <li
-            key={image.key}>{this.renderImageElement(image)}</li>);
+            key={image.imageId}>{this.renderImageElement(image)}</li>);
         return (
             <div className="timeline-container">
-                <button onClick={this.deleteWorkspace}>
-                    Workspace löschen
+                <button onClick={this.deleteTrip}>
+                    Trip löschen
                 </button>
                 <FileUpload/>
                 <h1>Timeline</h1>

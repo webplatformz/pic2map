@@ -3,26 +3,26 @@ import {connect} from "react-redux";
 
 import Map from './Map';
 import Timeline from './Timeline';
-import './Workspace.css';
+import './Trip.css';
 import {loadTripSuccessful} from "../../../actions/tripActions";
 import {getTrip} from "../../../middleware/api";
 
-class Workspace extends React.Component {
+class Trip extends React.Component {
 
     componentDidMount() {
-        getTrip(this.props.match.params.id)
+        getTrip(this.props.match.params.tripId)
             .then(response => response.json())
             .then(trip => this.props.loadTripSuccessful(trip))
             .catch(error => console.error(error));
     }
 
     render() {
-        if (!this.props.trip.key) {
+        if (!this.props.trip.tripId) {
             return <div>Loading...</div>;
         }
 
         return (
-            <div id="workspace-container">
+            <div id="trip-container">
                 <Map/>
                 <Timeline/>
             </div>
@@ -33,5 +33,5 @@ class Workspace extends React.Component {
 export default connect(
     (state) => ({trip: state.trip}),
     {loadTripSuccessful}
-)(Workspace);
+)(Trip);
 
