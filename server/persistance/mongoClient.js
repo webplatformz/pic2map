@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const Promise = require('bluebird');
+
+const Trip = require('./Trip');
 const guid = require('../util/guid');
 const {extract} = require('../metadata/metadataExtractor');
-const Promise = require('bluebird');
 
 console.log('Connecting to DB with ENV value from MONGODB_URI');
 
@@ -14,26 +16,7 @@ db.once('open', function () {
     // we're connected!
 });
 
-const TripSchema = mongoose.Schema({
-    name: String,
-    tripId: String,
-    tripViewId: String,
-    images: [{
-        imageId: String,
-        location: {
-            lat: Number,
-            lng: Number
-        },
-        filename: String,
-        timestamp: Number,
-        data: Buffer
-    }]
-});
-
-const Trip = db.model('Trip', TripSchema);
-
 function getTripById(tripId) {
-    const Trip = db.model('Trip', TripSchema);
     return Trip.findOne({tripId: tripId}).catch(console.warn);
 }
 
@@ -70,7 +53,6 @@ function addImagesToTrip(tripId, images) {
             });
     });
 }
-
 
 module.exports = {
     getTripById,
