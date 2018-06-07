@@ -73,7 +73,9 @@ class Timeline extends React.Component {
     }
     
     renderImageElement(image) {
-        return <TimelineElement image={image}/>
+        return <TimelineElement
+            editMode={this.state.editMode}
+            image={image}/>
     }
 
     render() {
