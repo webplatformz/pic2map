@@ -65,7 +65,11 @@ class TimelineElement extends React.Component {
 
     render() {
         const editMode = this.props.editMode;
-        const date = moment(this.props.image.date);
+
+        let date = '-';
+        if (this.props.image.timestamp) {
+            date = moment(this.props.image.timestamp * 1000).format('ddd, DD.MM.YYYY');
+        }
 
         const editElements = editMode ? (
             <div>
@@ -78,7 +82,7 @@ class TimelineElement extends React.Component {
                 <img alt="Placeholder"
                      src={`${API_ROOT}/trips/${this.props.tripId}/images/${this.props.image.imageId}`}/>
                 <Content>
-                    <h3>{date.format('ddd, DD.MM.YYYY')}</h3>
+                    <h3>{date}</h3>
                     <p>{this.props.image.title}</p>
                 </Content>
                 {editElements}
