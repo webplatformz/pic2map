@@ -22,12 +22,6 @@ const DeleteButton = styled(Button)`
     }
 `;
 
-const ShareButton = styled(Button)`
-    && {
-        margin-top: 10px;
-        float: right;
-    }
-`;
 const TimelineElements = styled.ul`
     padding-left: 10px;
     
@@ -102,7 +96,6 @@ class Timeline extends React.Component {
         const editElements = editMode ? (
             <div>
                 <DeleteButton variant="outlined" onClick={this.onDeleteClick}>Trip löschen</DeleteButton>
-                <ShareButton variant="outlined" onClick={this.onDeleteClick}>Share</ShareButton>
                 <FileUpload/>
             </div>
         ) : null;
