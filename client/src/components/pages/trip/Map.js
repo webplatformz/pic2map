@@ -103,7 +103,8 @@ class Map extends React.Component {
                 const icon = L.icon({
                     iconUrl: markerIcon,
                     shadowUrl: markerShadow,
-                    iconAnchor: [ 17, 42 ],
+                    iconAnchor: [17, 42],
+                    popupAnchor: [-4, -45] // point from which the popup should open relative to the iconAnchor
                     /*iconUrl: `/api/trips/${tripId}/images/${image.imageId}`,*/
                 });
                 const marker = L.marker([image.location.lat, image.location.lng]);
@@ -130,7 +131,7 @@ class Map extends React.Component {
                 if (image.location.lat > maxLat) {
                     maxLat = image.location.lat;
                 }
-                if(image.location.lat < minLat) {
+                if (image.location.lat < minLat) {
                     minLat = image.location.lat;
                 }
                 if (image.location.lng < minLong) {
