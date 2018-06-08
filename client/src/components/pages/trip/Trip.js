@@ -12,7 +12,7 @@ import styled from "styled-components";
 const TripContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    height: 100vh;
+    height: 95vh;
 `;
 
 const LoadingBox = styled.div `
