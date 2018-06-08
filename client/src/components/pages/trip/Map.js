@@ -30,6 +30,7 @@ class Map extends React.Component {
 
     componentDidMount() {
         this.initialiseMap();
+        this.recomputeMarkers();
     }
 
     render() {
@@ -91,7 +92,6 @@ class Map extends React.Component {
     recomputeMarkers() {
         imageLayerGroup.clearLayers();
         this.addMarkers(this.props.trip.tripId);
-
         if (map) {
             map.fitBounds(this.computeMapBoundaries());
         }
