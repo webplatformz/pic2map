@@ -109,7 +109,7 @@ class Map extends React.Component {
                 });
                 const marker = L.marker([image.location.lat, image.location.lng]);
                 marker.setIcon(icon);
-                marker.bindPopup(`<img src="/api/trips/${tripId}/images/${image.imageId}"/>`);
+                marker.bindPopup(`<img src="/api/trips/${tripId}/images/${image.imageId}" style="width: 600px"/>`, {minWidth: 600});
                 marker.on('mouseover', function (e) {
                     this.openPopup();
                 });

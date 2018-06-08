@@ -4,7 +4,7 @@ import FileUpload from "./FileUpload";
 import TimelineElement from "./TimelineElement";
 import styled from 'styled-components';
 import {deleteTrip} from "../../../middleware/api";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 
 
@@ -22,12 +22,6 @@ const DeleteButton = styled(Button)`
     }
 `;
 
-const ShareButton = styled(Button)`
-    && {
-        margin-top: 10px;
-        float: right;
-    }
-`;
 const TimelineElements = styled.ul`
     padding-left: 10px;
     
@@ -82,17 +76,26 @@ class Timeline extends React.Component {
             image={image}/>
     }
 
+    compareImageTimestamps(a, b) {
+        if (!a.timestamp) {
+            return -1;
+        }
+        if (!b.timestamp) {
+            return 1;
+        }
+        return a.timestamp - b.timestamp;
+    }
+
     render() {
         const editMode = this.state.editMode;
 
-        const imageElements = this.props.trip.images.map(
-            image => <li key={image.imageId}>{this.renderImageElement(image)}</li>
-        );
+        const imageElements = this.props.trip.images
+            .sort(this.compareImageTimestamps)
+            .map(image => <li key={image.imageId}>{this.renderImageElement(image)}</li>);
 
         const editElements = editMode ? (
             <div>
                 <DeleteButton variant="outlined" onClick={this.onDeleteClick}>Trip löschen</DeleteButton>
-                <ShareButton variant="outlined" onClick={this.onDeleteClick}>Share</ShareButton>
                 <FileUpload/>
             </div>
         ) : null;
