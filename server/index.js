@@ -49,8 +49,13 @@ app.post('/api/trips/:tripId/images', upload.array('images'), async (req, res) =
     res.sendStatus(200);
 });
 
-app.get('/api/trips/:tripId/images/:imageId', function (req, res) {
-    res.send(req.params)
+app.get('/api/trips/:tripId/images/:imageId', async (req, res) => {
+    try {
+        const imageStream = await mongoClient.getImageById(req.params.tripId, req.params.imageId);
+        imageStream.pipe(res);
+    } catch (error) {
+        res.status(error.status).send(error.msg);
+    }
 });
 
 app.get('/api/trips/:tripId/images/:imageId/thumb', function (req, res) {

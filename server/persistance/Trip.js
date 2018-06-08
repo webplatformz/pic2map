@@ -11,8 +11,7 @@ const TripSchema = mongoose.Schema({
             lng: Number
         },
         filename: String,
-        timestamp: Number,
-        data: Buffer
+        timestamp: Number
     }]
 });
 
