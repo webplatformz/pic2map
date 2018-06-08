@@ -5,7 +5,7 @@ import Dropzone from 'react-dropzone';
 import styled from 'styled-components';
 import {getTrip} from '../../../middleware/api';
 import {loadTripSuccessful} from '../../../actions/tripActions';
-import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 
 const UploadBox = styled.div`
   margin-top: 20px;

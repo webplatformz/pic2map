@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from "react-redux";
-import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+
 
 import Map from './Map';
 import Timeline from './Timeline';
