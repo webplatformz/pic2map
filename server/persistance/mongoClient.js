@@ -26,13 +26,7 @@ function createTrip() {
 }
 
 function getTripById(tripId) {
-    return Trip.findOne({tripId: tripId})
-        .then((res) => {
-            if (res) {
-                return res;
-            }
-            return Promise.reject(new Error(`Trip ${tripId} not found`));
-        });
+    return Trip.findOne({tripId: tripId});
 }
 
 function addImagesToTrip(tripId, images) {

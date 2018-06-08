@@ -37,12 +37,16 @@ app.get('/api/trips/:tripId', function (req, res) {
     const tripId = req.params.tripId;
     mongoClient.getTripById(tripId)
         .then(item => {
-            console.log(item);
-            res.send(item);
+            if (item) {
+                res.send(item);
+            } else {
+                console.warn(`Trip ${tripId} not found`);
+                res.sendStatus(404);
+            }
         })
         .catch((error) => {
             console.warn(error);
-            res.sendStatus(400);
+            res.sendStatus(500);
         });
     //mongoClient.insertMockData();
 });
