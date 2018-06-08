@@ -13,6 +13,10 @@ function pickFields(exifData) {
 }
 
 function convertDMSToDD(coordinatesArray, direction) {
+    if (!coordinatesArray || !direction) {
+        return undefined;
+    }
+
     const [degrees, minutes, seconds] = coordinatesArray;
     let dd = degrees + minutes / 60 + seconds / (60 * 60);
     if (direction === 'S' || direction === 'W') {
@@ -22,6 +26,10 @@ function convertDMSToDD(coordinatesArray, direction) {
 }
 
 function convertToUnixTs(dateString) {
+    if (!dateString) {
+        return undefined;
+    }
+
     const [date, time] = dateString.split(' ');
 
     const dateParts = date.split(':');
