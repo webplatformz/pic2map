@@ -8,6 +8,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster';
 import {connect} from "react-redux";
 import styled from 'styled-components';
+import markerIcon from 'leaflet/dist/images/marker-icon.png'
+import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 
 const MapContainer = styled.div`
     flex-basis: 800px;
@@ -28,6 +30,7 @@ class Map extends React.Component {
 
     componentDidMount() {
         this.initialiseMap();
+        this.recomputeMarkers();
     }
 
     render() {
@@ -89,7 +92,6 @@ class Map extends React.Component {
     recomputeMarkers() {
         imageLayerGroup.clearLayers();
         this.addMarkers(this.props.trip.tripId);
-
         if (map) {
             map.fitBounds(this.computeMapBoundaries());
         }
@@ -99,13 +101,12 @@ class Map extends React.Component {
         for (const image of this.props.trip.images) {
             if (this.imageWithLocationData(image)) {
                 const icon = L.icon({
-                    iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                    iconUrl: markerIcon,
+                    shadowUrl: markerShadow,
+                    iconAnchor: [17, 42],
+                    popupAnchor: [-4, -45] // point from which the popup should open relative to the iconAnchor
                     /*iconUrl: `/api/trips/${tripId}/images/${image.imageId}`,*/
-                    iconSize: [38, 95], // size of the icon
-                    iconAnchor: [22, 94],
-                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
                 });
-
                 const marker = L.marker([image.location.lat, image.location.lng]);
                 marker.setIcon(icon);
                 marker.bindPopup(`<img src="/api/trips/${tripId}/images/${image.imageId}"/>`);
@@ -130,7 +131,7 @@ class Map extends React.Component {
                 if (image.location.lat > maxLat) {
                     maxLat = image.location.lat;
                 }
-                if(image.location.lat < minLat) {
+                if (image.location.lat < minLat) {
                     minLat = image.location.lat;
                 }
                 if (image.location.lng < minLong) {

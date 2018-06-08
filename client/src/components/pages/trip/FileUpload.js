@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Dropzone from 'react-dropzone';
 import styled from 'styled-components';
-import {getTrip} from '../../../middleware/api';
+import {getTrip, postImages} from '../../../middleware/api';
 import {loadTripSuccessful} from '../../../actions/tripActions';
-import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 
 const UploadBox = styled.div`
   margin-top: 20px;
@@ -52,10 +52,8 @@ class FileUpload extends Component {
         const formData = new FormData();
         images.forEach(image => formData.append('images', image, image.name));
 
-        fetch(`/api/trips/${this.props.tripId}/images`, {
-            method: 'POST',
-            body: formData
-        }).then(response => {
+        postImages(this.props.tripId, formData)
+            .then(response => {
             if (response.ok) {
                 // Reload data
                 getTrip(this.props.tripId)

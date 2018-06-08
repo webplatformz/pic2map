@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
-const guid = require('./util/guid');
 const mongoClient = require('./persistance/mongoClient');
 const multer = require('multer');
+const imageTransformer = require('./image_processor/imageTransformer');
 
 const app = express();
 
@@ -23,30 +23,37 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.post('/api/trips', (req, res) => {
-    // TODO store it in DB.
-    res.json({tripId: guid.generate()});
+    mongoClient.createTrip()
+        .then((trip) => {
+            res.json(trip);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.sendStatus(500);
+        });
 });
 
 app.get('/api/trips/:tripId', function (req, res) {
     const tripId = req.params.tripId;
     mongoClient.getTripById(tripId)
         .then(item => {
-            console.log(item);
-
-            res.send(item || {
-                tripId:tripId,
-                images: []
-            });
+            if (item) {
+                res.send(item);
+            } else {
+                console.warn(`Trip ${tripId} not found`);
+                res.sendStatus(404);
+            }
         })
-        .catch(() => {
-            res.sendStatus(400);
+        .catch((error) => {
+            console.warn(error);
+            res.sendStatus(500);
         });
     //mongoClient.insertMockData();
 });
 
 app.post('/api/trips/:tripId/images', upload.array('images'), async (req, res) => {
     await mongoClient.addImagesToTrip(req.params.tripId, req.files);
-    res.sendStatus(200);
+    res.sendStatus(204);
 });
 
 app.get('/api/trips/:tripId/images/:imageId', async (req, res) => {
@@ -59,16 +66,48 @@ app.get('/api/trips/:tripId/images/:imageId', async (req, res) => {
 });
 
 app.get('/api/trips/:tripId/images/:imageId/thumb', function (req, res) {
+    const imageId = req.params.imageId;
+    mongoClient.getImageById(imageId)
+        .then(item => {
+            if (item) {
+                console.log("image found. ### TBD ### Processing Thumb");
+                imageTransformer.generateThumb(item.buffer)
+                    .then(thumb => {
+                        res.send(thumb);
+                    })
+                    .catch(() => {
+                        res.sendStatus(500);
+                    });
+            }
+            else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(() => {
+            res.sendStatus(500);
+        });
     res.send(req.params)
 });
 
 app.delete('/api/trips/:tripId/images/:imageId', function (req, res) {
+    mongoClient.deleteImage(req.params.tripId, req.params.imageId)
+        .then(() => {
+            res.sendStatus(204);
+        })
+        .catch(() => {
+            res.sendStatus(400);
+        });
     res.send(req.params)
 });
 
 app.delete('/api/trips/:tripId', (req, res) => {
-    // TODO Delete trip and images in DB.
-    res.sendStatus(204);
+    mongoClient.deleteTrip(req.params.tripId)
+        .then(() => {
+            res.sendStatus(204);
+        })
+        .catch(() => {
+            res.sendStatus(400);
+        });
 });
 
 app.delete('/api/clear-all-data', (req, res) => {

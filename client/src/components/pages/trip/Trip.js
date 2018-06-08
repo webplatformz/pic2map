@@ -1,11 +1,27 @@
 import React from 'react'
 import {connect} from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+
 
 import Map from './Map';
 import Timeline from './Timeline';
-import './Trip.css';
 import {loadTripSuccessful} from "../../../actions/tripActions";
 import {getTrip} from "../../../middleware/api";
+import styled from "styled-components";
+
+const TripContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    height: 95vh;
+`;
+
+const LoadingBox = styled.div `
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+`;
+
 
 class Trip extends React.Component {
 
@@ -18,14 +34,18 @@ class Trip extends React.Component {
 
     render() {
         if (!this.props.trip.tripId) {
-            return <div>Loading...</div>;
+            return (
+                <LoadingBox>
+                    <CircularProgress size={50}/>
+                </LoadingBox>
+            );
         }
 
         return (
-            <div id="trip-container">
+            <TripContainer>
                 <Map/>
                 <Timeline/>
-            </div>
+            </TripContainer>
         );
     }
 }

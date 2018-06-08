@@ -17,8 +17,17 @@ db.once('open', () => {
     Image = require('./Image');
 });
 
+function createTrip() {
+    const trip = new Trip({
+        name: 'New trip',
+        tripId: guid.generate(),
+        images: []
+    });
+    return Trip.create(trip);
+}
+
 function getTripById(tripId) {
-    return Trip.findOne({tripId: tripId}).catch(console.warn);
+    return Trip.findOne({tripId: tripId});
 }
 
 function getImageById(tripId, imageId) {
@@ -57,18 +66,23 @@ function addImagesToTrip(tripId, images) {
     });
 
     return getTripById(tripId).then(trip => {
-        const tripToUpdate = trip || new Trip({
-            name: 'New trip',
-            tripId: tripId,
-            images: []
-        });
-
         return Promise.all(futureImageData)
             .then(imageData => {
-                tripToUpdate.images = tripToUpdate.images.concat(imageData);
-                return Promise.fromCallback(cb => Trip.update({tripId: tripToUpdate.tripId}, tripToUpdate, {upsert: true}, cb));
+                trip.images = trip.images.concat(imageData);
+                return Promise.fromCallback(cb => Trip.update({tripId: trip.tripId}, trip, {upsert: true}, cb));
             });
     });
+}
+
+function deleteTrip(tripId) {
+    return Trip.findOne({tripId: tripId}).remove().exec();
+}
+
+function deleteImage(tripId, imageId) {
+    return Trip.update(
+        {tripId: tripId},
+        {$pull: {images: {imageId: imageId}}}
+    );
 }
 
 function storeImageToGridFs(file, tripId) {
@@ -86,9 +100,12 @@ function storeImageToGridFs(file, tripId) {
 }
 
 module.exports = {
+    createTrip,
     getTripById,
     getImageById,
     addImagesToTrip,
+    deleteTrip,
+    deleteImage,
     deleteTestTrip: function () {
     },
     insertMockData: function () {

@@ -3,6 +3,10 @@ import {connect} from "react-redux";
 import FileUpload from "./FileUpload";
 import TimelineElement from "./TimelineElement";
 import styled from 'styled-components';
+import {deleteTrip} from "../../../middleware/api";
+import { withRouter } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+
 
 const TimelineContainer = styled.div`
     padding: 0 20px;
@@ -12,10 +16,18 @@ const TimelineContainer = styled.div`
     overflow: auto;
 `;
 
-const DeleteButton = styled.button`
-    margin-top: 10px;
+const DeleteButton = styled(Button)`
+    && {
+      margin-top: 10px;
+    }
 `;
 
+const ShareButton = styled(Button)`
+    && {
+        margin-top: 10px;
+        float: right;
+    }
+`;
 const TimelineElements = styled.ul`
     padding-left: 10px;
     
@@ -47,22 +59,27 @@ class Timeline extends React.Component {
     constructor(props) {
         super(props);
         this.state = {editMode: true};
-        this.deleteTrip = this.deleteTrip.bind(this);
+        this.onDeleteClick = this.onDeleteClick.bind(this);
+        this.onShareClick = this.onShareClick.bind(this);
     }
 
-    deleteTrip() {
-        const tripId = this.props.trip.tripId;
-        fetch(`/api/trips/${tripId}`, {method: 'DELETE'})
+    onDeleteClick() {
+        deleteTrip(this.props.trip.tripId)
             .then(() => {
-                this.props.history.push('/');
+                this.props.history.push('');
             })
-            .catch(() => {
-                console.error("Could not delete trip");
-            });
+            .catch(() => console.error("Could not delete trip"));
     }
-    
+
+    onShareClick() {
+        // TODO share call
+    }
+
     renderImageElement(image) {
-        return <TimelineElement image={image}/>
+        return <TimelineElement
+            editMode={this.state.editMode}
+            tripId={this.props.trip.tripId}
+            image={image}/>
     }
 
     render() {
@@ -74,7 +91,8 @@ class Timeline extends React.Component {
 
         const editElements = editMode ? (
             <div>
-                <DeleteButton onClick={this.deleteTrip}>Trip löschen</DeleteButton>
+                <DeleteButton variant="outlined" onClick={this.onDeleteClick}>Trip löschen</DeleteButton>
+                <ShareButton variant="outlined" onClick={this.onDeleteClick}>Share</ShareButton>
                 <FileUpload/>
             </div>
         ) : null;
@@ -91,8 +109,8 @@ class Timeline extends React.Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         trip: state.trip
     })
-)(Timeline);
+)(Timeline));
