@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
 import Button from '@material-ui/core/Button';
-import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {API_ROOT, deleteImage, getTrip} from '../../../middleware/api';
 import {connect} from "react-redux";
@@ -48,13 +47,6 @@ const DeleteButton = styled(Button)`
     }
 `;
 
-const EditButton = styled(DeleteButton)`
-    && {
-      margin-top: 40px;
-    }
-`;
-
-
 class TimelineElement extends React.Component {
     constructor(props) {
         super(props);
@@ -78,7 +70,6 @@ class TimelineElement extends React.Component {
         const editElements = editMode ? (
             <div>
                 <DeleteButton variant="fab" onClick={this.onDeleteImageClick}><DeleteIcon/></DeleteButton>
-                <EditButton variant="fab"><EditIcon/></EditButton>
             </div>
         ) : null;
 
