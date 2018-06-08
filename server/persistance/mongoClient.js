@@ -66,11 +66,19 @@ function deleteTrip(tripId) {
     return Trip.findOne({tripId: tripId}).remove().exec();
 }
 
+function deleteImage(tripId, imageId) {
+    return Trip.update(
+        {tripId: tripId},
+        {$pull: {images: {imageId: imageId}}}
+    );
+}
+
 module.exports = {
     createTrip,
     getTripById,
     addImagesToTrip,
     deleteTrip,
+    deleteImage,
     deleteTestTrip: function () {
     },
     insertMockData: function () {

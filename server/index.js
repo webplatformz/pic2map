@@ -93,6 +93,13 @@ app.get('/api/trips/:tripId/images/:imageId/thumb', function (req, res) {
 });
 
 app.delete('/api/trips/:tripId/images/:imageId', function (req, res) {
+    mongoClient.deleteImage(req.params.tripId, req.params.imageId)
+        .then(() => {
+            res.sendStatus(204);
+        })
+        .catch(() => {
+            res.sendStatus(400);
+        });
     res.send(req.params)
 });
 
