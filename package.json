@@ -24,7 +24,7 @@
     "test:ci": "npm run test:client:ci && npm run test:server:ci"
   },
   "devDependencies": {
-    "concurrently": "3.5.1",
+    "concurrently": "3.6.1",
     "cpx": "1.5.0",
     "mkdirp": "0.5.1",
     "rimraf": "2.6.2"
